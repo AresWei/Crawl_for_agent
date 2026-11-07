@@ -95,7 +95,7 @@ Use that last object with **`platform.discover`**, not `platform.collect`. Homep
 
 ## Model configuration
 
-Host-driven answers use the host's own configured model, credentials and allowance. The standalone application currently accepts `answer_backend:"codex"` or `"local"`; new answer jobs default to Codex CLI with ChatGPT-account login, while local inference requires separately configured model assets. This selector is separate from the host's model choice. Follow [Agent integration](../../docs/AGENT_INTEGRATION.md) for configuration and current validation.
+Answers in the user's agent conversation use that tool's configured model, credentials and allowance. The application's `research.answer` and `answer.model` accept `answer_backend:"codex"`, `"api"` or `"local"`. New tasks default to Codex CLI with ChatGPT-account login; `api` requires an explicitly selected private profile, and local inference requires model assets. Codex has live Windows samples; API execution has simulated checks, and Claude Code integration remains unvalidated. Anthropic API support does not provide a Claude subscription backend. Follow [Agent integration](../../docs/AGENT_INTEGRATION.md) for configuration and evidence scope.
 
 Check backend availability before an application answer task. Login, quota or network failures retain sources and an incomplete outcome; do not switch to a paid API or install/activate a local model without the user's instruction.
 

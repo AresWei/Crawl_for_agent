@@ -35,13 +35,13 @@ Tasks share budgets, checkpoints, and resource management. If a source is unavai
 
 ## Built for Agent Harnesses
 
-Use Crawl_for_agent with **Codex, Claude Code, and other agent harnesses** through a [Skill](skill/research-crawler/SKILL.md), CLI commands, or the local API. The agent coordinates the research; Crawl_for_agent collects, stores, and returns the evidence.
+Connect an agent through the [Skill template](skill/research-crawler/SKILL.md), CLI commands, or the local HTTP API. The agent coordinates the research; Crawl_for_agent collects, stores, and returns the evidence. **Codex has live samples in the configured Windows environment. Claude Code and other agent harnesses are integration options through these interfaces; their end-to-end setup has not been validated.**
 
 ![Agent harness integration](docs/assets/agent-harness.png)
 
-Users choose **a model API or their account's subscription allowance** for research answers. Use the account or API configuration supported by Codex, Claude Code, or another agent tool, or configure an OpenAI-compatible endpoint or Anthropic API directly in this project's workbench. The application can then generate and review answers against collected sources. Subscription allowances and API billing follow the selected service's separate rules.
+Users choose how to run research answers. In an agent conversation, model access follows the user's configuration in that tool. The application's `codex` backend uses Codex CLI with a ChatGPT-account login and its available allowance. Its `api` backend uses a separately configured API key and endpoint, with usage governed by that provider; it does not use a ChatGPT or Claude subscription login. There is no built-in Claude subscription backend.
 
-New application answer tasks use the Codex account by default. API calls require the user's explicit selection of a saved configuration; there is no automatic switch. See [Agent integration](docs/AGENT_INTEGRATION.md) and the [Model API guide](docs/MODEL_API.md).
+New `research.answer` and `answer.model` tasks default to Codex. Users must explicitly select a saved profile for API calls; there is no automatic switch. The OpenAI-compatible and Anthropic API implementations have passed local simulated checks; real-provider calls have not been validated. See [Agent integration](docs/AGENT_INTEGRATION.md) and the [Model API guide](docs/MODEL_API.md).
 
 ## Ask naturally
 

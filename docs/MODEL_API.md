@@ -46,9 +46,9 @@ Submit with `research.answer`. For `answer.model`, provide `query`, `question`, 
 
 以上参数用于 `research.answer`。`answer.model` 使用 `query`、`question`、`answer_backend`、`api_profile` 与所需检索上限即可。这两个回答入口支持 API；评论分类和可选本地媒体处理继续使用原有配置。
 
-API research uses at most 64,000 source characters, leaving room for instructions and review. Model context limits still vary by provider. Truncation, invalid JSON, and failed quotation checks remain incomplete outcomes with saved evidence. No backend switch or provider retry occurs automatically.
+With the default `evidence_selection:"context"`, API research uses at most 64,000 source characters, leaving room for instructions and review. This is a source-text budget, not a provider token limit. Model context limits still vary by provider. Truncation, invalid JSON, and failed quotation checks remain incomplete outcomes with saved evidence. No backend switch or provider retry occurs automatically.
 
-API 研究的来源正文最多 64,000 字符，为指令和审核预留空间；模型实际上下文上限仍由提供方决定。输出截断、JSON 格式或引用校验失败时保留原文和未完成状态，不自动切换后端或重试提供方。
+在默认的 `evidence_selection:"context"` 方式下，API 研究的来源正文最多 64,000 字符，为指令和审核预留空间。这是原文字符预算，不是提供方的 token 上限；模型实际上下文限制仍由提供方决定。输出截断、JSON 格式或引用校验失败时保留原文和未完成状态，不自动切换后端或重试提供方。
 
 ## Local configuration interface / 本机配置接口
 

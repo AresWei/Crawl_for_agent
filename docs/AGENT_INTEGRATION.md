@@ -18,9 +18,9 @@ Crawl_for_agent 为用户提供持久化的采集与研究工作空间。用户�
 | CLI | Allow the host to invoke the configured project entrypoint / 允许智能体工具调用已配置的项目入口 | Explicit jobs, local scripts and inspection / 明确任务、本机脚本与结果检查 |
 | Local HTTP API | Start the local service and configure a private authenticated client / 启动本机服务，配置私密鉴权客户端 | Custom tools and local integrations / 自定义工具与本地集成 |
 
-Use the clone root supplied by the user or `RESEARCH_CRAWLER_HOME`. An installed Skill copy reads documentation from that root. Host-specific installation and tool permissions follow the host's configuration. Current conversational acceptance is from Codex; the other hosts listed above are integration routes through the same interfaces.
+Use the clone root supplied by the user or `RESEARCH_CRAWLER_HOME`. An installed Skill copy reads documentation from that root. Installation and tool permissions follow the selected agent tool's configuration. Codex has live conversational and account-backend samples in the configured Windows environment. Claude Code and other agent tools have not undergone end-to-end integration acceptance; the shared interfaces provide a route for users to configure them.
 
-使用用户指定目录或 `RESEARCH_CRAWLER_HOME`。单独安装的Skill从该目录读取文档，安装位置与工具权限遵循智能体工具配置。现有对话式验收来自Codex；其他智能体工具通过相同接口接入。
+使用用户指定目录或 `RESEARCH_CRAWLER_HOME`。单独安装的 Skill 从该目录读取文档，安装位置与工具权限遵循所选智能体工具的配置。Codex 已有本机 Windows 环境的对话及账号后端真实样本；Claude Code 等工具尚未完成端到端接入验收，共享接口提供了用户自行配置的接入路径。
 
 ## Research in your agent conversation / 在智能体对话中研究
 
@@ -79,6 +79,10 @@ Use this route when the application itself should persist generation, quotation 
 New answer jobs default to `codex`; historical parameters remain unchanged on resume. Users can explicitly choose `api` with a saved profile or the experimental `local` backend. Configure API credentials in the local workbench, then use only the profile name in jobs. See the [Model API guide](MODEL_API.md) for setup, protocol selection, and interface details.
 
 新建回答任务默认 `codex`，历史任务恢复不改原参数。用户可以明确选择 `api` 并指定已保存配置，或选择实验性的 `local` 后端。在本机工作台配置 API 凭据后，任务只填写配置别名。配置、协议选择与接口说明见[模型 API 指南](MODEL_API.md)。
+
+The `codex` backend specifically requires ChatGPT-account login, not a Codex CLI API-key login. The `api` backend uses its saved provider key; the project does not convert account subscription allowance into API access. Anthropic Messages support is an API implementation, not a Claude Code or Claude-subscription backend. API configuration, protocols and failure handling have local simulated evidence; real-provider execution remains unvalidated.
+
+`codex` 后端明确要求 ChatGPT 账号登录，不接受 Codex CLI 的 API Key 登录方式。`api` 后端使用已保存的提供方密钥，项目不会将账号订阅额度转换为 API 访问。Anthropic Messages 支持属于 API 实现，不是 Claude Code 或 Claude 订阅账号后端。API 配置、协议和失败处理已有本机模拟证据，真实提供方执行仍未验收。
 
 The Codex route requires an installed CLI with its supported ChatGPT-account login. If an executable location is needed, configure `RESEARCH_CODEX_EXE` before starting the service. This backend does not use an API key. Quota or network errors preserve sources and an incomplete outcome, with no automatic paid-API fallback. Local setup is optional; see [Capabilities](CAPABILITIES.md) for current quality.
 

@@ -35,13 +35,13 @@ Crawl_for_agent 是一个自主构建、面向智能体的研究程序。初版�
 
 ## 面向 Agent Harness
 
-用户可以在 **Codex、Claude Code 等 Agent Harness** 中，通过 [Skill](skill/research-crawler/SKILL.md)、CLI 或本地 API 使用 Crawl_for_agent。智能体负责组织研究，程序负责采集、保存和返回证据。
+用户可以通过 [Skill 模板](skill/research-crawler/SKILL.md)、CLI 或本机 HTTP API 接入智能体工具。智能体负责组织研究，程序负责采集、保存和返回证据。**Codex 已有本机 Windows 环境的真实使用样本；Claude Code 等 Agent Harness 可按这些接口进行接入，其端到端配置尚未验收。**
 
 ![智能体接入](docs/assets/agent-harness.png)
 
-用户可以自主选择**模型 API 或账号订阅额度**来完成研究回答：在 Codex、Claude Code 等工具中使用其支持的账号或 API 配置，也可以在本项目工作台配置 OpenAI 兼容接口或 Anthropic API，直接基于采集的来源生成和核对回答。订阅额度与 API 计费分别遵循所选服务的规则。
+用户自主选择研究回答方式。在智能体对话中，模型访问遵循用户在该工具中的配置。程序内的 `codex` 后端通过 Codex CLI 使用 ChatGPT 账号登录及其可用额度；`api` 后端使用用户另行配置的 API 密钥和接口，按提供方规则计量，不使用 ChatGPT 或 Claude 的订阅登录。程序尚无内置的 Claude 订阅账号后端。
 
-程序默认使用 Codex 账号；选择 API 时使用用户保存的接口配置，不自动切换。接入方式与配置步骤见 [Agent 接入指南](docs/AGENT_INTEGRATION.md)和[模型 API 指南](docs/MODEL_API.md)。
+新建 `research.answer` 和 `answer.model` 任务默认使用 Codex；用户明确选择 API 后才使用已保存配置，不自动切换。OpenAI 兼容与 Anthropic API 实现已通过本机模拟验证，尚未验收真实提供方调用。接入方式与配置步骤见 [Agent 接入指南](docs/AGENT_INTEGRATION.md)和[模型 API 指南](docs/MODEL_API.md)。
 
 ## 用自然语言提出任务
 

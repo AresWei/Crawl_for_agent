@@ -60,9 +60,9 @@ Save this task description to a parameters file and run `research.answer`:
 }
 ```
 
-Configure the application answer backend first. Search results are fetched before answering; missing sources or conditions produce partial coverage or an insufficient-evidence result. Inspect the recorded read ranges with the answer.
+This example uses the default Codex account backend. To use a saved API profile, explicitly add `"answer_backend":"api"` and `"api_profile":"your-profile"`; saving a profile alone does not change the default. Search results are fetched before answering; missing sources or conditions produce partial coverage or an insufficient-evidence result. Inspect the recorded read ranges with the answer.
 
-先配置程序回答后端。搜索后采集原文再回答；来源或关键条件缺失时保留部分覆盖或证据不足。查看回答时一并核对实际读取范围。
+此示例使用默认的 Codex 账号后端。使用已保存的 API 配置时，须明确添加 `"answer_backend":"api"` 和 `"api_profile":"配置别名"`；仅保存配置不会改变默认方式。搜索后采集原文再回答；来源或关键条件缺失时保留部分覆盖或证据不足。查看回答时一并核对实际读取范围。
 
 ## Choose a session deliberately / 明确选择会话
 

@@ -1,4 +1,4 @@
-"""Explicit project-local text model profiles; default remains the original 4B."""
+"""Local model assets and private, explicitly selected model API profiles."""
 import json
 from pathlib import Path
 
@@ -47,3 +47,69 @@ def installed_profile(root,model_id):
     if not verified or manifest.get('model_revision')!=item['revision'] or weights.stat().st_size!=item['bytes']:
         raise ValueError('Model weights lack the matching verified download manifest')
     return {**item,'path':str(weights.resolve())}
+
+
+def validate_api_url(value):
+    """An explicit endpoint, never URL credentials or environment routing."""
+    import ipaddress
+    from urllib.parse import urlsplit
+    if not isinstance(value, str) or not value or len(value)>2048 or any(c.isspace() or ord(c)<32 for c in value) or '\\' in value:
+        raise ValueError('Invalid model API base URL')
+    try:
+        parsed=urlsplit(value)
+        port=parsed.port
+        loopback=parsed.hostname=='localhost'
+        try:loopback=loopback or ipaddress.ip_address(parsed.hostname or '').is_loopback
+        except ValueError:pass
+        if (not parsed.hostname or parsed.username is not None or parsed.password is not None
+                or parsed.query or parsed.fragment or '?' in value or '#' in value
+                or parsed.scheme not in {'http','https'} or (parsed.scheme=='http' and not loopback)):
+            raise ValueError()
+    except ValueError:
+        raise ValueError('Model API URL requires HTTPS or loopback HTTP without credentials, query or fragment') from None
+    return value.rstrip('/')
+
+
+class ModelProfileStore:
+    """Private API settings: Windows DPAPI, owner-only storage on other systems."""
+    def __init__(self,root):
+        from .paths import AppPaths
+        self.directory=Path(root.root if isinstance(root,AppPaths) else root).resolve()/'state'/'model-api'
+
+    def _path(self,name):
+        from .paths import safe_name
+        if not isinstance(name,str):raise ValueError('Invalid model API profile name')
+        return self.directory/(safe_name(name)+'.json')
+
+    @staticmethod
+    def _safe(value):
+        return {**{key:value[key] for key in ('name','provider','base_url','model','revision')},'configured':True}
+
+    def save(self,name,*,provider,base_url,model,api_key):
+        import uuid
+        from .accounts import write_private
+        path=self._path(name)
+        if provider not in {'openai','anthropic'}:raise ValueError('Unsupported model API provider')
+        base_url=validate_api_url(base_url)
+        if not isinstance(model,str) or not model.strip() or len(model)>200 or any(ord(c)<32 for c in model):
+            raise ValueError('Invalid model API model identifier')
+        if not isinstance(api_key,str) or not api_key.strip() or len(api_key)>8192 or any(ord(c)<33 or ord(c)>126 for c in api_key):
+            raise ValueError('Invalid model API credential')
+        value={'name':name,'provider':provider,'base_url':base_url,'model':model.strip(),
+               'api_key':api_key,'revision':uuid.uuid4().hex}
+        write_private(path,value)
+        return self._safe(value)
+
+    def load(self,name):
+        from .accounts import read_private
+        value=read_private(self._path(name))
+        if value.get('name')!=name or value.get('provider') not in {'openai','anthropic'}:
+            raise ValueError('Invalid model API profile')
+        validate_api_url(value['base_url'])
+        return value
+
+    def list(self):
+        return [self._safe(self.load(path.stem)) for path in sorted(self.directory.glob('*.json'))]
+
+    def delete(self,name):
+        self._path(name).unlink(missing_ok=True)

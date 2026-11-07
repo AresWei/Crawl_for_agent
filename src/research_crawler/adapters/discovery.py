@@ -10,7 +10,8 @@ import time
 import httpx
 
 from ..intelligence.grounded_answer import GENERATION_CONTRACT, GROUNDED_SCHEMA, generate_grounded_answer
-from ..core.jobs import BudgetExceeded
+from ..core.jobs import BudgetExceeded, answer_backend_metadata, answer_unavailable_status
+from ..core.store import validate_answer_params
 from ..core.records import Record
 from ..core.sessions import budget_for, controlled
 from ..intelligence.local_model import LocalModelClient, LocalModelUnavailable
@@ -28,15 +29,16 @@ CAPABILITIES = {
     "status": "bounded_public_providers", "source": "independently authored public RSS/HTML discovery",
     "implemented": ["web_search", "source_page_fetch", "local_model_cited_research_answer", "resume", "provider_failure_reporting"],
     "providers": ["brave_html", "bing_rss", "duckduckgo_html"], "paid_fallback": False, "codex_tool_backend": False,
-    "answer_backends": ["local", "codex"], "ui_preferred_backend": "codex",
+    "answer_backends": ["local", "codex", "api"], "ui_preferred_backend": "codex",
     "codex_account": {"network_required": True, "account_quota_used": True, "api_key_used": False},
     "jobs": {"web.search": {"query": "1..300 characters", "limit": "1..20, default 5"},
              "research.answer": {"query": "1..300 characters", "question": "optional 1..1500 characters",
                                  "fetch_top": "1..5, default 3", "limit": "1..20, default 5",
                                  "source_attempt_limit": "fetch_top..20, default min(20, fetch_top*3)",
                                  "answer_backend": "new jobs default codex; persisted legacy jobs without this field retain local",
-                                 "evidence_selection": "lexical, hybrid, planned, or context (Codex only; UI preferred)",
-                                 "source_context_chars": "context mode: default 96000; maximum 120000"}},
+                                 "evidence_selection": "lexical, hybrid, planned, or context (Codex/API)",
+                                 "api_profile": "required named configured profile when answer_backend=api",
+                                 "source_context_chars": "context mode: Codex default 96000/max120000; API default/max64000"}},
     "limits": ["public providers can block or change", "snippets are not full-page evidence", "citation IDs do not prove semantic accuracy"],
 }
 
@@ -53,6 +55,7 @@ def answer_input_key(context, model, question, evidence):
              'generation_contract':GENERATION_CONTRACT,
              'answer_schema':GROUNDED_SCHEMA, 'question':question,
              'backend':context.params.get('answer_backend','local'), 'model_identity':identity,
+             'api_profile':context.params.get('api_profile'),
              'evidence':evidence, 'selection':context.params.get('evidence_selection','lexical'),
              'source_context_chars':context.params.get('source_context_chars',96000),
              'max_tokens':context.params.get('max_tokens',640)}
@@ -165,23 +168,26 @@ async def fetch_sources(context, found: dict, *, session_factory=WebSession) -> 
 
 
 async def research_answer(context, *, search_handler=search_web, source_handler=fetch_sources, model_factory=None):
+    validate_answer_params('research.answer', context.params)
     question = context.params.get("question", context.params.get("query", ""))
     if not isinstance(question, str) or not question.strip() or len(question) > 1500:
         raise ValueError("question must contain 1..1500 characters")
     if not 1 <= int(context.params.get("fetch_top", 3)) <= 5:
         raise ValueError("fetch_top must be 1..5")
     checkpoint = await context.checkpoint("discovery_answer")
-    if checkpoint and checkpoint["exhausted"]:
+    if checkpoint and checkpoint["exhausted"] and context.params.get('answer_backend') != 'api':
         return dict(checkpoint["metadata"]["summary"])
     found = await search_handler(context)
     sources = await source_handler(context, found) if found["results"] else {"evidence": [], "errors": [], "requested": 0, "fetched": 0}
     evidence = sources["evidence"]
     answer_key = None
     answer_result = None
+    model = None
     summary = {"status": "partial", "mode": "web_research_local_model", "question": question,
                "query": found["query"], "search": found, "sources": sources, "evidence": evidence,
                "network_search_used": True, "model_used": False, "answer": None, "claims": [],
                "citation_ids_validated": False, "semantic_accuracy_automatically_proven": False}
+    summary.update(answer_backend_metadata(context.params, summary))
     # The outer scheduling/control owner can cancel this coroutine at a budget
     # boundary. Share only the real progress; generate_once merges its audited
     # result in finally before controlled() finishes settling cancellation.
@@ -191,21 +197,27 @@ async def research_answer(context, *, search_handler=search_web, source_handler=
                        limits="没有成功读取的来源正文；搜索摘要不足以替代来源回答。")
     else:
         try:
-            model = await context.resources.enter_async_context(model_factory(context.paths.root) if model_factory else
-                text_client(context.paths.root,context.params.get('answer_backend','local')))
+            model = model_factory(context.paths.root) if model_factory else text_client(
+                context.paths.root, context.params.get('answer_backend', 'local'),
+                **({'api_profile': context.params['api_profile']} if context.params.get('answer_backend') == 'api' else {}))
+            context.answer_model_client = model
+            model = await context.resources.enter_async_context(model)
             if context.params.get('evidence_selection')=='context':
-                if context.params.get('answer_backend')!='codex':
-                    raise ValueError('Full source context requires the Codex account backend')
-                selected = await enrich_full_evidence(context,sources)
+                if context.params.get('answer_backend') not in {'codex', 'api'}:
+                    raise ValueError('Full source context requires the Codex or API backend')
+                selection_context = context
+                if context.params.get('answer_backend') == 'api':
+                    selection_context = scoped_context(context, {**context.params,
+                        'source_context_chars': context.params.get('source_context_chars', 64000)})
+                selected = await enrich_full_evidence(selection_context,sources)
             elif context.params.get('evidence_selection')=='planned':
                 selected = await enrich_planned_evidence(context,model,sources,question,found['query'])
             else:
                 selected = await enrich_evidence(context,sources,question=question,query=found['query'])
             evidence = selected['evidence']
             summary.update(evidence=evidence,evidence_selection=selected['selection'])
-            summary['answer_backend']=context.params.get('answer_backend','local')
-            summary['account_quota_used']=summary['answer_backend']=='codex'
-            summary['mode']='web_research_codex_account' if summary['account_quota_used'] else 'web_research_local_model'
+            summary['mode'] = {'codex': 'web_research_codex_account', 'api': 'web_research_api_model'}.get(
+                context.params.get('answer_backend'), 'web_research_local_model')
             answer_key = answer_input_key(context,model,question,evidence)
             cached = checkpoint['metadata'] if checkpoint else {}
             if answer_key and cached.get('answer_input_key')==answer_key and cached.get('answer_completed'):
@@ -226,12 +238,13 @@ async def research_answer(context, *, search_handler=search_web, source_handler=
                         # Include the finished draft/review even if the enclosing
                         # control check raises immediately after model completion.
                         summary.update(progress)
+                        summary.update(answer_backend_metadata(context.params, summary, model))
                 summary.update(await controlled(context,generate_once()))
                 summary['answer_reused']=False
             if found['status']=='partial' or sources['errors']:
                 summary['status']='partial'
         except LocalModelUnavailable:
-            summary.update(status='partial',answer_status="codex_account_unavailable" if context.params.get('answer_backend')=='codex' else "local_model_unavailable",
+            summary.update(status='partial',answer_status=answer_unavailable_status(context.params),
                            insufficient=True, limits="所选回答后端当前不可用；已保留来源及已核对的部分回答。" if summary.get('claims') else "所选回答后端当前不可用；已保留搜索与原文证据。")
         except BudgetExceeded as exc:
             summary.update(status='partial',answer_status="budget_exceeded", insufficient=True, reason=exc.reason,
@@ -239,6 +252,7 @@ async def research_answer(context, *, search_handler=search_web, source_handler=
         except (ValueError, TypeError, httpx.HTTPError):
             summary.update(status='partial',answer_status="invalid_or_truncated_model_output", insufficient=True,
                            limits="后续模型响应或引用校验失败；已保存来源及此前核对的部分回答。" if summary.get('claims') else "模型响应或引用校验失败，未发布其结论。")
+    summary.update(answer_backend_metadata(context.params, summary, model))
     summary.update(requests=budget_for(context).requests, network_bytes=budget_for(context).bytes,
                    elapsed_seconds=round(time.monotonic() - budget_for(context).started, 3))
     record = Record("local_model", "research_answer", context.job_id, "", summary,

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sqlite3
 import uuid
 import psutil
@@ -10,6 +11,43 @@ from pathlib import Path
 from typing import Any, Iterable, Iterator
 
 from .records import Record, canonical_json, utcnow
+
+
+def validate_answer_params(kind: str, params: dict) -> None:
+    """Reject model credentials/configuration before they can enter task history."""
+    supported = kind in {'answer.model', 'research.answer'}
+    backend = params.get('answer_backend', 'local')
+    if supported or 'answer_backend' in params or 'api_profile' in params:
+        if not isinstance(backend, str) or backend not in {'local', 'codex', 'api'}:
+            raise ValueError('answer_backend must be local, codex, or api')
+        if backend == 'api' and not supported:
+            raise ValueError('API answers are supported only by answer.model and research.answer')
+        if backend == 'api':
+            name = params.get('api_profile')
+            if not isinstance(name, str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]{0,99}', name):
+                raise ValueError('API answers require a valid named api_profile')
+        elif 'api_profile' in params:
+            raise ValueError('api_profile requires answer_backend=api')
+        forbidden = {'apikey', 'accesstoken', 'authorization', 'proxyauthorization',
+                     'openaiapikey', 'anthropicapikey', 'apitoken', 'bearertoken',
+                     'secret', 'secretkey', 'clientsecret', 'baseurl', 'apibase',
+                     'apiurl', 'endpoint', 'apiendpoint', 'headers', 'provider', 'model', 'modelid'}
+        def inspect(value):
+            if isinstance(value, dict):
+                for key, item in value.items():
+                    normalized = re.sub(r'[^a-z0-9]', '', str(key).lower())
+                    if normalized in forbidden:
+                        # Never echo a supplied key/value into a persisted error.
+                        raise ValueError('Model secrets and connection settings belong in a configured profile, not job parameters')
+                    inspect(item)
+            elif isinstance(value, list):
+                for item in value:
+                    inspect(item)
+        inspect(params)
+        if backend == 'api' and params.get('evidence_selection') == 'context':
+            budget = params.get('source_context_chars', 64000)
+            if type(budget) is not int or not 1 <= budget <= 64000:
+                raise ValueError('API source_context_chars must be an integer 1..64000')
 
 
 TRANSITIONS = {
@@ -142,8 +180,11 @@ class Store:
         if kind in {"answer.model", "research.answer"}:
             params = dict(params)
             params.setdefault("answer_backend", "codex")
-            if kind == "research.answer" and params["answer_backend"] == "codex":
+            if kind == "research.answer" and params["answer_backend"] in ("codex", "api"):
                 params.setdefault("evidence_selection", "context")
+            if params["answer_backend"] == "api" and params.get('evidence_selection') == 'context':
+                params.setdefault('source_context_chars', 64000)
+        validate_answer_params(kind, params)
         job_id, now = uuid.uuid4().hex, utcnow()
         with self.connection() as db:
             db.execute("INSERT INTO jobs(id,kind,params_json,status,created_at,updated_at) VALUES(?,?,?,?,?,?)",

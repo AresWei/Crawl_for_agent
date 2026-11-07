@@ -2,9 +2,9 @@
 
 [Usage](USAGE.md) · [Architecture](ARCHITECTURE.md) · [Capabilities](CAPABILITIES.md)
 
-Crawl_for_agent gives an agent a persistent collection and research workspace. Codex, Claude Code, and other tool-capable hosts can invoke its Skill instructions, CLI, or local HTTP API, then use their own configured model to reason over the returned material.
+Crawl_for_agent gives users a persistent collection and research workspace. Users can work through Codex, Claude Code, or another agent tool using the Skill, CLI, or local HTTP API, and choose a supported account subscription or model API for reasoning over the returned material.
 
-Crawl_for_agent 为智能体提供持久化的采集与研究工作空间。Codex、Claude Code及其他支持工具调用的宿主，可以通过Skill指引、命令行或本机HTTP API调用，再用宿主已配置的模型分析返回资料。
+Crawl_for_agent 为用户提供持久化的采集与研究工作空间。用户可以在 Codex、Claude Code 等智能体工具中，通过 Skill、命令行或本机 HTTP API 调用，并自主选择受支持的账号订阅或模型 API 来分析返回资料。
 
 ![Agent and research workspace](assets/agent-harness.png)
 
@@ -14,29 +14,29 @@ Crawl_for_agent 为智能体提供持久化的采集与研究工作空间。Code
 
 | Connection / 方式 | Setup / 配置 | Best fit / 适用场景 |
 |---|---|---|
-| Skill | Copy [the template](../skill/research-crawler/SKILL.md) into the host's supported skill location and provide the clone root / 复制模板到宿主支持的技能目录，并指定项目位置 | Conversational collection and research / 对话式采集研究 |
-| CLI | Allow the host to invoke the configured project entrypoint / 允许宿主调用已配置的项目入口 | Explicit jobs, local scripts and inspection / 明确任务、本机脚本与结果检查 |
+| Skill | Copy [the template](../skill/research-crawler/SKILL.md) into the host's supported skill location and provide the clone root / 复制模板到智能体工具支持的技能目录，并指定项目位置 | Conversational collection and research / 对话式采集研究 |
+| CLI | Allow the host to invoke the configured project entrypoint / 允许智能体工具调用已配置的项目入口 | Explicit jobs, local scripts and inspection / 明确任务、本机脚本与结果检查 |
 | Local HTTP API | Start the local service and configure a private authenticated client / 启动本机服务，配置私密鉴权客户端 | Custom tools and local integrations / 自定义工具与本地集成 |
 
 Use the clone root supplied by the user or `RESEARCH_CRAWLER_HOME`. An installed Skill copy reads documentation from that root. Host-specific installation and tool permissions follow the host's configuration. Current conversational acceptance is from Codex; the other hosts listed above are integration routes through the same interfaces.
 
-使用用户指定目录或 `RESEARCH_CRAWLER_HOME`。单独安装的Skill从该目录读取文档，安装位置与工具权限遵循宿主配置。现有对话式验收来自Codex；其他宿主通过相同接口接入。
+使用用户指定目录或 `RESEARCH_CRAWLER_HOME`。单独安装的Skill从该目录读取文档，安装位置与工具权限遵循智能体工具配置。现有对话式验收来自Codex；其他智能体工具通过相同接口接入。
 
-## Host-driven research / 由宿主完成研究
+## Research in your agent conversation / 在智能体对话中研究
 
 1. The host interprets the question and selects a bounded collection or retrieval task.
 2. Crawl_for_agent saves original material, source identity, coverage and errors.
 3. The host reads the saved evidence and answers with source references.
 4. Follow-up questions reuse the library or resume the relevant task.
 
-1. 宿主理解问题，选择有界采集或检索任务。
+1. 智能体工具理解问题，选择有界采集或检索任务。
 2. Crawl_for_agent保存原文、来源身份、覆盖范围与错误。
-3. 宿主读取证据并附来源回答。
+3. 智能体工具读取证据并附来源回答。
 4. 后续问题复用资料库或继续原任务。
 
-Inference belongs to the host in this route: it uses whatever API connection or subscription-backed model access the host supports and the user has configured. Billing, quota, model choice and login remain with the host. Collecting a page does not require starting the application's independent answer backend.
+Users choose and configure the model access supported by their agent tool, including an API connection or account subscription. The selected service determines billing and available allowance. Collecting a page does not require starting the application's independent answer backend.
 
-这条路线由宿主执行推理，使用宿主支持且用户已配置的API连接或订阅模型访问方式；计费、额度、模型选择及登录归宿主管理。采集网页本身不需要启动程序的独立回答后端。
+用户在所选智能体工具中配置模型，可使用其支持的 API 连接或账号订阅；计费与可用额度由所选服务决定。采集网页本身不需要启动程序的独立回答后端。
 
 For example, an agent can run `web.search`, `web.collect` or `search.local`, inspect saved records, and answer in the current conversation. This avoids a second model call for the same answer. Examples are in [Usage](USAGE.md).
 
@@ -72,12 +72,13 @@ Use this route when the application itself should persist generation, quotation 
 | `research.answer` | Search, fetch, select context, generate and review / 搜索、采集、组织上下文、生成与审核 |
 | `answer.model` | Model answer over stored material / 基于已存资料进行模型回答 |
 | `answer_backend:"codex"` | Existing Codex CLI with ChatGPT login; network and account allowance / 已有Codex CLI及ChatGPT登录，使用网络和账户额度 |
+| `answer_backend:"api"`, `api_profile:"my-model"` | User-configured OpenAI-compatible or Anthropic API / 用户配置的 OpenAI 兼容接口或 Anthropic API |
 | `answer_backend:"local"` | Configured local runtime and model assets; experimental answer quality / 已配置本机运行环境和模型，回答质量仍属实验 |
-| `evidence_selection:"context"` | Bounded complete-source context with recorded ranges for Codex research / Codex研究使用有界来源正文并记录范围 |
+| `evidence_selection:"context"` | Bounded source context with recorded ranges for Codex or API research / Codex 或 API 研究使用有界来源正文并记录范围 |
 
-New answer jobs default to `codex`; historical parameters remain unchanged on resume. The standalone selector accepts `codex` and `local`. Claude Code or another host can reason through its own model after collection; that is distinct from a built-in `claude` backend or generic API-provider parameter.
+New answer jobs default to `codex`; historical parameters remain unchanged on resume. Users can explicitly choose `api` with a saved profile or the experimental `local` backend. Configure API credentials in the local workbench, then use only the profile name in jobs. See the [Model API guide](MODEL_API.md) for setup, protocol selection, and interface details.
 
-新建回答任务默认 `codex`，历史任务恢复不改原参数。独立后端选择项为 `codex` 和 `local`。Claude Code等宿主可在采集后调用自身模型；这与程序内置 `claude` 后端或通用API提供方参数是两回事。
+新建回答任务默认 `codex`，历史任务恢复不改原参数。用户可以明确选择 `api` 并指定已保存配置，或选择实验性的 `local` 后端。在本机工作台配置 API 凭据后，任务只填写配置别名。配置、协议选择与接口说明见[模型 API 指南](MODEL_API.md)。
 
 The Codex route requires an installed CLI with its supported ChatGPT-account login. If an executable location is needed, configure `RESEARCH_CODEX_EXE` before starting the service. This backend does not use an API key. Quota or network errors preserve sources and an incomplete outcome, with no automatic paid-API fallback. Local setup is optional; see [Capabilities](CAPABILITIES.md) for current quality.
 

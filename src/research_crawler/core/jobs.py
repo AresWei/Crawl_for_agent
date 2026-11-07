@@ -29,6 +29,29 @@ class BudgetExceeded(Exception):
         self.summary = None
 
 
+def answer_backend_metadata(params, summary, model=None):
+    """Separate backend selection, retained output, and this run's API requests."""
+    backend = params.get('answer_backend', 'local')
+    attempted = getattr(model, 'requests_attempted', 0) if backend == 'api' else 0
+    completed = getattr(model, 'requests_completed', 0) if backend == 'api' else 0
+    attempted = attempted if type(attempted) is int and attempted >= 0 else 0
+    completed = completed if type(completed) is int and completed >= 0 else 0
+    used_now = bool(summary.get('model_used')) and not summary.get('answer_reused', False)
+    metadata = {'answer_backend': backend, 'api_selected': backend == 'api',
+                'api_key_used': bool(attempted), 'api_requests_attempted': attempted,
+                'api_requests_completed': completed,
+                'model_used_this_run': bool(completed) if backend == 'api' else used_now,
+                'account_quota_used': backend == 'codex' and used_now}
+    if backend == 'api':
+        metadata['api_profile'] = params.get('api_profile')
+    return metadata
+
+
+def answer_unavailable_status(params):
+    return {'codex': 'codex_account_unavailable', 'api': 'api_model_unavailable'}.get(
+        params.get('answer_backend'), 'local_model_unavailable')
+
+
 @dataclass
 class JobContext:
     job_id: str
@@ -37,6 +60,7 @@ class JobContext:
     paths: AppPaths
     resources: AsyncExitStack
     answer_progress: dict | None = None
+    answer_model_client: Any = None
 
     def answer_budget_summary(self, reason: str) -> dict | None:
         """Snapshot already-settled answer progress without certifying completion."""
@@ -44,10 +68,10 @@ class JobContext:
             return None
         saved = copy.deepcopy(self.answer_progress)
         saved.update(status='partial',answer_status='budget_exceeded',insufficient=True,
-            reason=reason,answer_backend=self.params.get('answer_backend','local'),
-            account_quota_used=self.params.get('answer_backend')=='codex',
+            reason=reason,
             limits='达到任务预算；已保存来源及已核对的部分回答。' if saved.get('claims') else
                    '达到任务预算；已保留来源与草稿记录，未发布未核对的模型结论。')
+        saved.update(answer_backend_metadata(self.params, saved, self.answer_model_client))
         return saved
 
     async def check_control(self) -> None:

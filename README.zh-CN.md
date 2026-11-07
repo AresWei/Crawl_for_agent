@@ -35,13 +35,13 @@ Crawl_for_agent 是一个自主构建、面向智能体的研究程序。初版�
 
 ## 面向 Agent Harness
 
-**Codex、Claude Code 等智能体宿主**可以通过 [Skill](skill/research-crawler/SKILL.md)、CLI 或本地 API 调用 Crawl_for_agent。智能体负责组织研究，程序负责采集、保存和返回证据。
+用户可以在 **Codex、Claude Code 等 Agent Harness** 中，通过 [Skill](skill/research-crawler/SKILL.md)、CLI 或本地 API 使用 Crawl_for_agent。智能体负责组织研究，程序负责采集、保存和返回证据。
 
-![Agent 宿主集成](docs/assets/agent-harness.png)
+![智能体接入](docs/assets/agent-harness.png)
 
-推理由宿主按其支持的方式使用**模型 API 或订阅额度**，模型访问、计费与可用工具遵循宿主配置。例如，宿主智能体通过 CLI 采集网页后，可以直接在当前对话中依据原文回答。
+用户可以自主选择**模型 API 或账号订阅额度**来完成研究回答：在 Codex、Claude Code 等工具中使用其支持的账号或 API 配置，也可以在本项目工作台配置 OpenAI 兼容接口或 Anthropic API，直接基于采集的来源生成和核对回答。订阅额度与 API 计费分别遵循所选服务的规则。
 
-宿主配置、调用接口与独立程序的回答后端设置见 [Agent 接入指南](docs/AGENT_INTEGRATION.md)。
+程序默认使用 Codex 账号；选择 API 时使用用户保存的接口配置，不自动切换。接入方式与配置步骤见 [Agent 接入指南](docs/AGENT_INTEGRATION.md)和[模型 API 指南](docs/MODEL_API.md)。
 
 ## 用自然语言提出任务
 
@@ -55,7 +55,7 @@ Crawl_for_agent 是一个自主构建、面向智能体的研究程序。初版�
 
 ## 环境准备
 
-按照[环境准备指南](docs/GETTING_STARTED.md)配置 Windows、Python 依赖、Node.js，以及任务需要的浏览器组件。模型辅助任务配置所选智能体宿主或独立回答后端；本地模型按需要启用的可选功能准备。
+按照[环境准备指南](docs/GETTING_STARTED.md)配置 Windows、Python 依赖、Node.js，以及任务需要的浏览器组件。模型辅助任务由用户选择智能体工具或程序内回答方式；本地模型按需要启用的可选功能准备。
 
 在已配置的项目目录运行：
 

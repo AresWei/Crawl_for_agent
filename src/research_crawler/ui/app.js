@@ -3,7 +3,8 @@ const token = document.querySelector('meta[name="research-token"]').content;
 const $ = id => document.getElementById(id);
 const states = {pending:'等待执行',running:'进行中',complete:'已完成',partial:'部分完成',auth_required:'需要登录',failed:'执行失败',paused:'已暂停',cancelled:'已取消',interrupted:'执行中断'};
 let selected = null, polling = false, platformCaps = {}, accounts = [], handlers = [], exportTargets = [], renderedJobSignature = null;
-let answerAvailability = {local:false,codex:false};
+let answerAvailability = {local:false,codex:false,api:false};
+let apiModelProfiles = [];
 const homepageModes={
   'bili-trending':{platform:'bili',mode:'trending',label:'哔哩哔哩热搜'},
   'bili-homefeed':{platform:'bili',mode:'homefeed',label:'哔哩哔哩首页推荐'},
@@ -19,7 +20,7 @@ function node(tag,text,className){const e=document.createElement(tag);if(text!==
 function message(text,error=false){$('form-status').textContent=text;$('form-status').classList.toggle('error-text',error);}
 function answerBackendParams(mode){
   const backend=$('answer-backend').value;
-  return ['model','research'].includes(mode)?{answer_backend:backend,...(mode==='research'?{evidence_selection:backend==='codex'?'context':'planned'}:{})}:{};
+  return ['model','research'].includes(mode)?{answer_backend:backend,...(backend==='api'?{api_profile:$('api-profile')?.value||''}:{}),...(mode==='research'?{evidence_selection:['codex','api'].includes(backend)?'context':'planned'}:{})}:{};
 }
 function imageCreationParams(mode){
   const params={prompt:$('urls').value.trim(),seed:Number($('image-seed').value),max_seconds:600};
@@ -64,6 +65,8 @@ function updateMode(){
   for(const source of ['wayback','crt'])$('discovery-'+source).disabled=mode!=='map';
   $('retrieval-option').hidden=mode!=='model';
   $('answer-backend-option').hidden=!['model','research'].includes(mode);
+  if(window.syncApiModelSelection)window.syncApiModelSelection();
+  $('submit').disabled=['model','research'].includes(mode)?!handlers.includes(mode==='research'?'research.answer':'answer.model')||($('answer-backend').value==='api'&&!answerAvailability.api):!handlers.includes('web.collect');
   $('image-options').hidden=!creation;
   $('image-reference').parentElement.hidden=mode!=='image-edit';
   $('image-reference').required=mode==='image-edit';
@@ -102,7 +105,9 @@ async function loadStatus(){
       document.querySelector(`#mode option[value="${mode}"]`).disabled=!data.modules.platform_discovery?.capabilities?.platforms?.[entry.platform]?.modes?.includes(entry.mode);
     }
     const modelConfigured=data.model?.available||data.model?.configured;
-    answerAvailability={local:!!modelConfigured,codex:!!data.codex_model?.available};
+    apiModelProfiles=data.model_api?.profiles||[];
+    answerAvailability={local:!!modelConfigured,codex:!!data.codex_model?.available,api:!!data.model_api?.configured};
+    if(window.renderApiModelProfiles)window.renderApiModelProfiles(apiModelProfiles);
     document.querySelector('#mode option[value="model"]').textContent='已采集资料问答';
     document.querySelector('#mode option[value="model"]').disabled=!handlers.includes('answer.model');
     document.querySelector('#mode option[value="research"]').disabled=!handlers.includes('research.answer');
@@ -350,7 +355,7 @@ async function loadExportTargets(){
   const qaOptions=node('div',undefined,'field-row');qaOptions.id='qa-options';qaOptions.hidden=true;const siteLabel=node('label','问答站点'),site=node('input');site.id='qa-site';site.value='stackoverflow';site.pattern='[a-z0-9][a-z0-9.\\-]{0,99}';siteLabel.append(site);qaOptions.append(siteLabel);const commentsLabel=node('label'),qaComments=node('input');qaComments.id='qa-comments';qaComments.type='checkbox';commentsLabel.append(qaComments,document.createTextNode('同时读取公开评论'));qaOptions.append(commentsLabel);webOptions.after(qaOptions);
   for(const [id,title] of [['cc','Common Crawl'],['wayback','互联网档案馆'],['crt','证书透明度记录']]){const row=node('label'),input=node('input');input.id='discovery-'+id;input.type='checkbox';row.append(input,document.createTextNode(title));discoveryOptions.append(row);}webOptions.after(discoveryOptions);
   const retrievalLabel=node('label','资料检索方式');retrievalLabel.id='retrieval-option';retrievalLabel.hidden=true;const retrieval=node('select');retrieval.id='model-retrieval';retrieval.add(new Option('文字匹配','lexical'));retrieval.add(new Option('语义匹配','semantic'));retrievalLabel.append(retrieval);webOptions.after(retrievalLabel);
-  const answerLabel=node('label','回答方式');answerLabel.id='answer-backend-option';answerLabel.hidden=true;const answerBackend=node('select');answerBackend.id='answer-backend';answerBackend.add(new Option('Codex 账号（联网、使用现有额度）','codex'));answerBackend.add(new Option('本地模型（实验）','local'));answerBackend.value='codex';answerBackend.addEventListener('change',updateMode);answerLabel.append(answerBackend);webOptions.after(answerLabel);
+  const answerLabel=node('label','回答方式');answerLabel.id='answer-backend-option';answerLabel.hidden=true;const answerBackend=node('select');answerBackend.id='answer-backend';answerBackend.add(new Option('Codex 账号（联网、使用现有额度）','codex'));answerBackend.add(new Option('本地模型（实验）','local'));const apiOption=new Option('模型 API（自主选择）','api');apiOption.disabled=true;answerBackend.add(apiOption);answerBackend.value='codex';answerBackend.addEventListener('change',updateMode);answerLabel.append(answerBackend);webOptions.after(answerLabel);
   const imageOptions=node('div',undefined,'field-row');imageOptions.id='image-options';imageOptions.hidden=true;
   const referenceLabel=node('label','参考图片路径'),reference=node('input');reference.id='image-reference';reference.placeholder='F:\\…';referenceLabel.append(reference);imageOptions.append(referenceLabel);
   reference.addEventListener('input',clearImageReferenceHash);
@@ -385,6 +390,7 @@ async function loadExportTargets(){
 }
 $('mode').addEventListener('change',updateMode);$('platform-mode').addEventListener('change',updateMode);
 $('collect-form').addEventListener('submit',async event=>{
+  if(['model','research'].includes($('mode').value)&&$('answer-backend').value==='api'&&(!answerAvailability.api||!$('api-profile')?.value)){event.preventDefault();message('请先保存并选择一个模型 API 配置。',true);return;}
   event.preventDefault();const values=$('urls').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);if(!values.length&&!Object.hasOwn(homepageModes,$('mode').value)&&!['bili-hot','tieba-hot'].includes($('mode').value))return;
   const mode=$('mode').value;let body;
   if(isPlatform()){

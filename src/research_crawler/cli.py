@@ -156,9 +156,13 @@ def main() -> None:
                 return local, codex
 
         local_health, codex_health = asyncio.run(model_health())
+        from .core.model_profiles import ModelProfileStore
+        api_profiles = ModelProfileStore(paths.root).list()
         output = {"version": __version__, "root": str(paths.root), "database": str(paths.database),
                   "jobs": [{key: job[key] for key in ("id", "kind", "status", "updated_at")} for job in store.jobs()[:10]],
                   "handlers": list(runner.handlers), "modules": modules, "model": local_health, "codex_model":codex_health,
+                  "model_api": {"supported": True, "configured": bool(api_profiles),
+                                "profiles": api_profiles, "explicit_selection_required": True},
                   "stage": "partial-source-migration"}
     else:
         output = {"job": store.job(args.id), "counts": store.counts(args.id), "events": store.events(args.id)}

@@ -39,9 +39,9 @@ Use Crawl_for_agent with **Codex, Claude Code, and other agent harnesses** throu
 
 ![Agent harness integration](docs/assets/agent-harness.png)
 
-The host can use its own supported **model API or subscription allowance** for reasoning. Model access, billing, and available tools follow that host's configuration. For example, a host agent can collect pages through the CLI and answer directly in the existing conversation.
+Users choose **a model API or their account's subscription allowance** for research answers. Use the account or API configuration supported by Codex, Claude Code, or another agent tool, or configure an OpenAI-compatible endpoint or Anthropic API directly in this project's workbench. The application can then generate and review answers against collected sources. Subscription allowances and API billing follow the selected service's separate rules.
 
-See [Agent integration](docs/AGENT_INTEGRATION.md) for host setup, interface choices, and standalone answer-backend configuration.
+New application answer tasks use the Codex account by default. API calls require the user's explicit selection of a saved configuration; there is no automatic switch. See [Agent integration](docs/AGENT_INTEGRATION.md) and the [Model API guide](docs/MODEL_API.md).
 
 ## Ask naturally
 

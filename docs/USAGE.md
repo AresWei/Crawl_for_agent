@@ -16,9 +16,9 @@ Start from a configured environment and use `status` to check available capabili
 
 > 只查这个主题已采集的资料，不重新联网。给出结论对应的原文片段。
 
-The host can use its configured API or supported subscription model to answer from the saved sources. Standalone workbench tasks use the application's configured answer backend. Choose either route in [Agent integration](AGENT_INTEGRATION.md).
+Users can choose their agent tool's supported subscription or API connection, or configure a model API directly in the local workbench, to answer from saved sources. See [Agent integration](AGENT_INTEGRATION.md) and [Model API setup](MODEL_API.md).
 
-宿主可用其已配置API或受支持订阅模型，根据保存的来源回答；独立工作台使用程序已配置的回答后端。接入方式见[智能体接入](AGENT_INTEGRATION.md)。
+用户可以选择智能体工具支持的账号订阅或 API，也可以直接在本机工作台配置模型 API，根据保存的来源回答。具体见[智能体接入](AGENT_INTEGRATION.md)与[API 配置](MODEL_API.md)。
 
 ## Collect first / 先采集原文
 

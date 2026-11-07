@@ -147,6 +147,14 @@ def create_app(root: str | Path | None = None, *, runner_override: JobRunner | N
 
     @app.get("/api/status")
     async def status():
+        from .core.model_profiles import ModelProfileStore
+        try:
+            api_profiles = await asyncio.to_thread(ModelProfileStore(paths.root).list)
+            api_status = {'supported': True, 'configured': bool(api_profiles),
+                          'profiles': api_profiles, 'explicit_selection_required': True}
+        except (OSError, ValueError):
+            api_status = {'supported': True, 'configured': False, 'profiles': [],
+                          'status': 'configuration_unavailable', 'explicit_selection_required': True}
         model_status = {"available": False}
         if "answer.model" in runner.handlers:
             from .intelligence.local_model import LocalModelClient
@@ -163,8 +171,47 @@ def create_app(root: str | Path | None = None, *, runner_override: JobRunner | N
                 codex_status = dict(codex_health_cache['value'])
         return {"version": __version__, "home": str(paths.root), "modules": modules,
                 "handlers": list(runner.handlers), "active": list(active),
-                "model": model_status, "codex_model":codex_status,
-                "acceptance": "in_progress", "paid_api_enabled": False}
+                "model": model_status, "codex_model":codex_status, "model_api": api_status,
+                "acceptance": "in_progress", "paid_api_enabled": api_status['configured']}
+
+    @app.get('/api/model-profiles')
+    async def model_profiles():
+        from .core.model_profiles import ModelProfileStore
+        try:
+            return {'profiles': await asyncio.to_thread(ModelProfileStore(paths.root).list)}
+        except (OSError, ValueError):
+            raise HTTPException(503, '模型 API 配置暂时无法读取。') from None
+
+    @app.put('/api/model-profiles/{name}')
+    async def save_model_profile(name: str, request: Request):
+        from .core.model_profiles import ModelProfileStore
+        # Parse privately: validation responses must never echo the key/body.
+        data = bytearray()
+        async for chunk in request.stream():
+            data.extend(chunk)
+            if len(data) > 16384:
+                raise HTTPException(413, '模型 API 配置超过大小限制。')
+        try:
+            value = json.loads(data)
+            fields = {'provider', 'base_url', 'model', 'api_key'}
+            if not isinstance(value, dict) or set(value) != fields or not all(isinstance(value[key], str) for key in fields):
+                raise ValueError()
+            return await asyncio.to_thread(ModelProfileStore(paths.root).save, name, **value)
+        except (ValueError, TypeError, KeyError):
+            raise HTTPException(422, '请检查配置名称、提供方、服务地址、模型名称和密钥。') from None
+        except OSError:
+            raise HTTPException(503, '模型 API 配置无法安全保存。') from None
+
+    @app.delete('/api/model-profiles/{name}')
+    async def delete_model_profile(name: str):
+        from .core.model_profiles import ModelProfileStore
+        try:
+            await asyncio.to_thread(ModelProfileStore(paths.root).delete, name)
+            return {'deleted': True}
+        except ValueError:
+            raise HTTPException(422, '配置名称无效。') from None
+        except OSError:
+            raise HTTPException(503, '模型 API 配置暂时无法删除。') from None
 
     @app.get("/api/jobs")
     async def jobs():
@@ -344,7 +391,10 @@ def create_app(root: str | Path | None = None, *, runner_override: JobRunner | N
                     raise HTTPException(422, "Each URL must be an HTTP(S), explicit local file or raw source")
             if type(body.params.get("max_pages", 8)) is not int or not 1 <= body.params.get("max_pages", 8) <= 50:
                 raise HTTPException(422, "max_pages must be between 1 and 50")
-        job = store.create_job(body.kind, body.params)
+        try:
+            job = store.create_job(body.kind, body.params)
+        except ValueError:
+            raise HTTPException(422, '任务参数无效。API 回答请指定配置名称，密钥和连接参数应在模型 API 配置中保存。') from None
         launch(job["id"])
         return job
 

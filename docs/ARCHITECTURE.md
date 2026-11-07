@@ -1,76 +1,86 @@
 # Architecture / 架构
 
-[English overview](../README.md) · [中文概览](../README.zh-CN.md) · [Capabilities](CAPABILITIES.md)
+[Overview](../README.md) · [中文概览](../README.zh-CN.md) · [Agent integration](AGENT_INTEGRATION.md) · [Capabilities](CAPABILITIES.md)
 
-## One application, shared ownership / 一个程序，共享组件
+## A task-centered research system / 以任务为中心的研究系统
 
-The integration centralizes task state, persistence, budgets, sessions, and resource ownership. Platform adapters and web collection use that common core instead of running two unrelated upstream applications. The optional signing service is a component of the same project; it calculates signatures and does not fetch platform content.
+Crawl_for_agent organizes collection, retrieval, analysis, and exports around one task runtime. Each task has explicit sources, an identity, budgets, durable progress, and an observable outcome. Web and platform adapters share the same storage and resource lifecycle.
 
-整合的核心是统一任务、存储、预算、会话及资源归属。网页与平台适配使用共同基础设施，不是同时运行两个互不关联的上游程序。可选独立签名服务仍属同一项目，只计算签名，不代发平台采集请求。
+Crawl_for_agent 以统一任务组织采集、检索、分析与导出。每项任务都有明确来源、身份、预算、持久进度和可查看的结果；网页与平台适配共享存储及资源生命周期。
 
 ```mermaid
 flowchart TD
-    A[Agent skill / 智能体技能] --> R[Task runner / 任务调度]
-    U[Local worktable and CLI / 本机工作台与命令行] --> R
-    R --> B[Budgets and checkpoints / 预算与断点]
-    R --> W[Web adapters / 网页适配]
-    R --> P[Platform adapters / 平台适配]
-    R --> S[Search and analysis / 搜索与分析]
-    W --> T[Shared HTTP and browser lifecycle / 共享传输与浏览器]
+    A[Agent host / 智能体宿主] --> C[Skill · CLI · Local API]
+    U[Workbench / 工作台] --> R[Job runner / 任务运行器]
+    C --> R
+    R --> B[Budgets · checkpoints / 预算与断点]
+    R --> W[Web collection / 网页采集]
+    R --> P[Platform collection / 平台采集]
+    W --> T[Shared HTTP and browsers / 共享传输]
     P --> T
-    P --> I[Selected identity and optional pool / 所选身份与可选池]
-    P --> G[Local or loopback signing / 本地或回环签名]
-    W --> D[Versioned evidence store / 版本化证据库]
+    P --> I[Selected account and proxy / 所选账号与代理]
+    P --> G[Optional signing service / 可选签名服务]
+    W --> D[Versioned evidence / 版本化证据]
     P --> D
-    S <--> D
+    D --> S[Retrieval and analysis / 检索与分析]
     D --> E[Exports and reports / 导出与报告]
-    S --> M[Selected model backend / 所选模型后端]
+    S --> A
+    S --> M[Optional application model backend / 可选程序模型后端]
 ```
 
-## Evidence before answers / 先有证据，再作回答
+The application owns scheduling and evidence persistence. Its adapters include attributed source-derived algorithms as well as project-specific components; component origins and licenses are recorded in [Provenance](PROVENANCE.md).
 
-Search results identify candidates; they are not substitutes for fetched text. Saved records retain the source URL, content/version identity, field and range coverage where applicable. Answers select quotations from those records. A separate review checks each claim against its own selected supports; shared context can expose conditions or counterexamples, but cannot supply unselected positive support.
+程序负责调度和证据持久化。适配器包含保留署名的源算法及项目自有组件，具体来源和许可见[源码溯源](PROVENANCE.md)。
 
-搜索结果用于发现，不替代实际正文。记录保留 URL、内容版本身份及适用的字段/读取范围。回答从这些记录选取引文，再逐条审核结论。共享上下文可帮助发现条件或反例，不能拿未选引文补足正向依据。
+## Research library / 研究资料库
+
+![Research library](assets/research-library.png)
+
+[Artwork notes / 插画说明](ARTWORK.md)
+
+Collected records retain their URL, content version, observation time, and available source date. Text extraction and analysis carry field/range references where applicable. Derived Markdown, labels, model descriptions, and answer drafts remain distinguishable from original content.
+
+采集记录保留 URL、内容版本、观测时间及来源提供的日期；文本提取和分析按适用情况保存字段及原文范围。派生 Markdown、标签、模型描述和回答草稿与原始内容明确区分。
+
+This supports three useful operations: retrieve previous material, trace a conclusion to its source, and resume a task without discarding its earlier work. Exports preserve selected records and their provenance.
+
+因此可以复用已有资料、沿结论回查来源，也可以从断点继续任务。导出保留所选记录与出处信息。
+
+## From sources to answers / 从来源到回答
+
+An agent host can collect sources and answer in its own conversation. Alternatively, the application's research handler performs a persisted generation-and-review workflow. [Agent integration](AGENT_INTEGRATION.md) explains the configuration of both routes.
+
+智能体宿主可以采集后直接在当前对话回答；程序的研究处理器也可以执行持久化的生成与审核流程。两条路线的配置见[智能体接入](AGENT_INTEGRATION.md)。
 
 ```mermaid
 flowchart LR
-    Q[Question / 问题] --> F[Discover and fetch / 发现与采集]
-    F --> V[Saved source versions / 保存来源版本]
-    V --> C[Bounded context selection / 有界上下文]
-    C --> D[Draft and exact quotes / 草稿与原文引用]
-    D --> R[Per-claim support review / 逐结论审核]
-    R --> A[Accepted claims / 已接受结论]
-    R --> J[Rejected claims retained / 保留拒绝记录]
-    J -. eligible once / 符合条件仅一次 .-> P[Bounded wording repair / 有界措辞修正]
-    P --> R2[One further review / 再审核一次]
-    A --> O[Answer with coverage status / 回答及覆盖状态]
+    Q[Question / 问题] --> F[Search and collect / 搜索采集]
+    F --> V[Exact source versions / 精确来源版本]
+    V --> C[Context with read ranges / 带范围的上下文]
+    C --> D[Draft and quotations / 草稿与引文]
+    D --> R[Claim support review / 逐条依据核对]
+    R --> O[Answer and coverage / 回答与覆盖范围]
+    R --> P[One eligible repair / 符合条件时修正一次]
+    P --> R2[Review repair / 复核修正]
     R2 --> O
 ```
 
-Repair does not widen the selected sources or run indefinitely. Reviewed progress is retained across controlled budget interruption. Answer reuse on resume requires matching question, source versions/ranges, backend identity, and generation/review contracts. Coverage failure can keep the overall task partial even when some claims are accepted.
+Each claim is checked against its selected quotations. Additional source context helps identify qualifications and contradictions. Rejected claims and incomplete coverage remain visible. A repair uses the same selected sources and a bounded additional review.
 
-修正不能扩大选定来源，也不无限循环。受控预算中断保留已审核进度；恢复复用须匹配问题、来源版本/范围、后端身份及生成/审核协议。部分结论已接受，整体来源覆盖仍可能是 partial。
+逐条结论使用其选定引文接受核对，补充上下文用于识别条件和矛盾。被拒结论及未覆盖部分保留记录；修正沿用选定来源，并受额外审核次数限制。
 
-## Account boundary / 账号边界
+Resume reuses an eligible reviewed answer when the question, source versions/ranges, backend identity, and generation/review contracts still match. Controlled budget interruption preserves reviewed progress.
 
-Normal login saves a user-selected session. CookieBridge is a separate, explicit import path: the real toolbar captures the source tab/store, a persistent extension page requests the selected site's permissions, and a one-use local pairing transfers the supported cookie subset. Temporary permissions are removed after the attempt. It neither scans other browser profiles nor transfers general application credentials to the extension.
+问题、来源版本与范围、后端身份、生成及审核契约一致时，恢复可复用已审核答案。受控预算中断保留已审核进度。
 
-正常登录保存用户选择的会话；CookieBridge 是独立的显式导入入口：真实工具栏捕获来源页/容器，持久扩展页申请所选站点权限，通过一次性本机配对传输支持的 Cookie 子集，最后撤回临时权限。不扫描其他浏览器配置，也不向扩展提供通用应用凭据。
+## Identity and resource lifecycle / 身份与资源生命周期
 
-Pool tasks pin one account/proxy pair and snapshot it for the task. Authentication failure does not silently switch identity. Local secret protection is Windows-specific in the validated environment; database contents and run artifacts still require appropriate local handling.
+Normal login saves a selected platform session. CookieBridge provides an alternative user-authorized import from a selected browser site/store through one-use local pairing. Temporary site permissions are removed after the attempt. Account/proxy pools pin a pair and snapshot it for the task; authentication failure stops that identity's work rather than switching accounts.
 
-池任务固定账号与代理配对，并使用任务内身份快照。鉴权失败不会静默换号。已验证环境中的私密状态保护使用 Windows 机制；研究库与运行产物仍须妥善保管。
+普通登录保存所选平台会话；CookieBridge 通过用户授权及一次性本机配对，从选定浏览器站点／容器导入会话，并在结束后撤回临时权限。账号代理池为任务固定配对与身份快照；鉴权失败时停止该身份的工作。
 
-## Resource and backend choices / 资源与后端
+HTTP clients, owned browser contexts, page/request limits, and cancellation are coordinated by the shared task runtime. Borrowed browsers retain their external ownership. CPU retrieval and optional GPU work load resources when needed; model jobs use a shared resource coordinator. The optional loopback signing service performs signature computation while the task's HTTP client remains responsible for collection.
 
-- CPU semantic retrieval and optional GPU model work use coordinated, bounded workers. Optional features are not all loaded for ordinary collection.
-- The Codex backend uses an existing ChatGPT login, network access and account allowance. Its CLI output-token request is a soft budget, not a verified API-equivalent hard token limit.
-- The loopback signing service adds authentication, concurrency and time/input limits, but per-call worker startup has overhead. Separation is not a throughput claim.
-- Browser cleanup applies to task-owned resources. Borrowed external browser contexts retain separate ownership rules.
+HTTP 客户端、自有浏览器上下文、页面／请求限制及取消由任务运行器统一管理，借用浏览器保留外部归属。CPU 检索与可选 GPU 工作按需加载资源，模型任务通过共同协调器执行。可选回环签名服务只计算签名，采集仍由任务 HTTP 客户端执行。
 
-CPU 语义检索与可选 GPU 模型通过共享协调与预算执行；普通采集不要求加载全部可选模型。Codex 使用账号、网络与额度，其 CLI 输出 token 要求属于软预算。签名服务具有认证和限额，但逐次 worker 启动有额外成本，不宣称提速。浏览器清理仅作用于任务拥有的资源，借用外部上下文遵循独立归属规则。
-
-This architecture describes the integrated design, not a distributed deployment benchmark or a guarantee of model truthfulness. Consult [Capabilities](CAPABILITIES.md) before extending its acceptance claims.
-
-这份架构描述不等于分布式部署基准，也不保证模型结论正确；实际验收范围以[能力矩阵](CAPABILITIES.md)为准。
+See [Capabilities](CAPABILITIES.md) for current platform samples, model-quality observations, and environment coverage.

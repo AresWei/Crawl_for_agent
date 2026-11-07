@@ -1,8 +1,25 @@
 # Generated concept artwork / 生成概念配图
 
-Three images generated with the built-in image-generation tool on 2026-11-07. The tool did not expose a selectable model identifier; these images are **not labelled image2.6**. They are concept illustrations, not screenshots, measured results, or exact architecture diagrams. Original generated PNGs are used without image editing.
+Five images generated with the built-in image-generation tool on 2026-11-07. The collection illustrates the project identity, research workflow, platform content, agent integration, and evidence library. These are concept illustrations rather than application screenshots or exact architecture diagrams. Original generated PNGs are used without image editing. The tool does not expose a selectable model identifier.
 
-2026-11-07 使用内置生图生成三张配图。工具未提供可选择的模型编号，不标称为 image2.6。图片仅为概念插画，不是产品截图、实测结果或精确架构图。
+2026-11-07 使用内置生图生成五张配图，分别呈现项目定位、研究流程、平台内容、Agent 接入和证据资料库。统一采用深绿、象牙白、磨砂玻璃与铜色细节。图片为概念插画，区别于产品截图和精确架构图；工具未提供可选择的模型编号。
+
+## agent-harness
+
+![agent-harness](assets/agent-harness.png)
+
+Prompt:
+
+> Create an exquisite editorial concept illustration for the Agent Harness integration section of Crawl_for_agent. Landscape 1536x1024, matching a research-instrument series: deep evergreen studio backdrop, warm ivory ceramic, frosted pale jade glass, thin antique copper connectors, restrained Swiss editorial composition and soft tactile lighting. A small beautifully crafted central research instrument, shaped like a vertical optical lens over an orderly stack of evidence sheets. Three distinct connector pieces approach it from the left, subtly engraved with exactly 'SKILL', 'CLI', 'API'. On the right, a single elegant open glass frame represents the host agent's reasoning workspace, connected to the same evidence sheets. The visual tells a clear story of one research engine connecting into agent workflows, NOT a fabricated app interface. No vendor logos, no robots, no fake screens, no miniature dashboard text, no metric badges, no claims of automatic compatibility. Ample negative space; graceful precise geometry, richer layering than a generic icon. The only heading is 'YOUR AGENT. CONNECTED.' in immaculate warm-ivory type near the top. Make the copper paths understandable and non-chaotic, museum-quality materials, premium journal spread.
+
+## research-library
+
+![research-library](assets/research-library.png)
+
+Prompt:
+
+> Generate a sophisticated editorial concept illustration of a personal research evidence library for Crawl_for_agent documentation, landscape 1536x1024. Continue a cohesive visual identity of deep forest-green, warm ivory paper and ceramic, pale jade frosted glass, tiny antique copper details. A precise tabletop still life with an elegant archive of translucent source folios on the left, a carefully opened notebook with abstract source passage lines in the center, and three clean report sheets arranged on the right. Fine copper index clips visibly connect selected source passages to the report sheets, making traceability intuitive. One little folded corner and two subtle tab dividers add human craft and richness. Tactile light, calm depth, sophisticated physical realism, plenty of space, beautiful shadows, editorial art direction worthy of a finely designed research monograph. Heading, exactly: 'A LIBRARY OF EVIDENCE'. No other readable text, no numbers or claims, no application UI, no logos, no citations to real people, no robots. This is a concept illustration of saved sources and reusable research outputs, not a screenshot or architecture diagram.
+
 
 ## hero
 

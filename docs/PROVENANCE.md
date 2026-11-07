@@ -1,6 +1,6 @@
 # Source and publication scope / 来源与发布范围
 
-This source preview was prepared on 2026-11-07 from the locally integrated Research Crawler project. The public repository name is **Crawl_for_agent**; the Python package, CLI command and Skill keep the existing **research-crawler** identity.
+This public source package was prepared on 2026-11-07 from the independently developed Research Crawler project. The public repository name is **Crawl_for_agent**; the Python package, CLI command and Skill keep the existing **research-crawler** identity. The project began with a new engineering foundation and a shared research workflow, selectively incorporating source implementations recorded below.
 
 ## Source pins
 
@@ -15,7 +15,7 @@ The freeze records describe upstream acquisition, including historical archive l
 
 - Integrated Python application and required frontend/JavaScript/GraphQL assets.
 - Selected runtime entry scripts, scoped Chrome extension, and a portable Skill template.
-- English-first documentation, Chinese translation, capability boundaries and three generated concept illustrations.
+- English-first documentation, Chinese translation, capability status and five generated concept illustrations.
 - Upstream licenses, attribution and source provenance.
 
 ## Deliberately excluded
@@ -30,7 +30,7 @@ This publication does not rerun platform tasks or transfer the maintainer's auth
 
 ## 中文
 
-本仓库为 2026-11-07 整理的公开源码预览。仓库名为 Crawl_for_agent，内部包、CLI 与 Skill 名保留 research-crawler。完整上游归档只存在于开发工作区；公开仓库保留实际集成源码、来源清单、许可和署名。
+本仓库为 2026-11-07 整理的公开源码。项目从新的工程基础和统一研究工作流起步，选择性参考并复用了本页记录的部分实现。仓库名为 Crawl_for_agent，内部包、CLI 与 Skill 名保留 research-crawler。完整上游归档只存在于开发工作区；公开仓库保留实际使用的源码、来源清单及许可声明。
 
 账号、Cookie、密钥、代理凭据、浏览器资料、采集数据、任务历史、私人审计、运行时、模型权重、缓存与临时诊断均未发布。已有实测来自配置完成的 Windows 安装，不代表首次克隆已具备所有可选依赖。测试原始资料没有随仓库分发。发布时仅将专属 Codex 路径改为可配置/PATH 发现，不扩展功能。
 

@@ -1,10 +1,10 @@
 # Usage / 使用方式
 
-[English overview](../README.md) · [中文概览](../README.zh-CN.md) · [Capabilities](CAPABILITIES.md)
+[English overview](../README.md) · [中文概览](../README.zh-CN.md) · [Capabilities](CAPABILITIES.md) · [Agent integration](AGENT_INTEGRATION.md)
 
-These examples assume the required environment has already been configured. They are task patterns, not fresh-install instructions or new live-test results. Optional modules should be checked with `status` before use.
+Start from a configured environment and use `status` to check available capabilities. Choose small page and record limits for the first task.
 
-以下示例以环境已配置为前提，是任务写法，不是全新安装教程或新增实测结果。可选模块先通过 `status` 确认可用。
+准备好环境后，用 `status` 查看可用能力。首次任务建议设置较小的页面与记录上限。
 
 ## Ask an agent / 在智能体中提出任务
 
@@ -16,9 +16,9 @@ These examples assume the required environment has already been configured. They
 
 > 只查这个主题已采集的资料，不重新联网。给出结论对应的原文片段。
 
-The skill can use the host conversation's available search and reasoning tools. Standalone worktable tasks use the configured application backends; these are different execution paths and should not be billed or described as identical.
+The host can use its configured API or supported subscription model to answer from the saved sources. Standalone workbench tasks use the application's configured answer backend. Choose either route in [Agent integration](AGENT_INTEGRATION.md).
 
-技能可使用当前对话已有搜索与推理能力；独立工作台使用已配置的程序后端。两条执行路径不同，不能把宿主能力描述为独立内置 API。
+宿主可用其已配置API或受支持订阅模型，根据保存的来源回答；独立工作台使用程序已配置的回答后端。接入方式见[智能体接入](AGENT_INTEGRATION.md)。
 
 ## Collect first / 先采集原文
 
@@ -54,17 +54,15 @@ Save this task description to a parameters file and run `research.answer`:
 {
   "query": "Python TaskGroup cancellation official documentation",
   "question": "Why should a coroutine normally propagate cancellation after cleanup?",
-  "answer_backend": "codex",
-  "evidence_selection": "context",
   "limit": 5,
   "fetch_top": 3,
   "max_seconds": 300
 }
 ```
 
-The Codex account must already be usable. Search results are fetched before answering; a provider failure or missing condition can legitimately produce a partial answer or insufficient-evidence result. Default source-context budgets are finite, so inspect the recorded read coverage.
+Configure the application answer backend first. Search results are fetched before answering; missing sources or conditions produce partial coverage or an insufficient-evidence result. Inspect the recorded read ranges with the answer.
 
-须已有可用 Codex 账号。先采集来源再回答；搜索失败或关键条件缺失时，合理结果可能是部分回答或证据不足。来源上下文预算有限，应查看实际读取范围。
+先配置程序回答后端。搜索后采集原文再回答；来源或关键条件缺失时保留部分覆盖或证据不足。查看回答时一并核对实际读取范围。
 
 ## Choose a session deliberately / 明确选择会话
 
@@ -78,7 +76,23 @@ For extension import, select the intended destination account, generate a local 
 
 ## Start with a bounded platform request / 从有限平台任务开始
 
-For a source you are authorized to access, use one known note and no comments:
+Ask your agent for a small Xiaohongshu search and comment sample:
+
+> Use my selected Xiaohongshu account to search for museum visits. Collect at most2 posts, at most3 root comments per post and one page. Keep the post links, original text and coverage status.
+
+> 使用我选定的小红书账号搜索“博物馆”，最多2篇帖子，每篇最多3条根评论、最多1页。保存帖子链接、原文及覆盖状态。
+
+Use this object with `platform.collect`:
+
+```json
+{"platform":"xhs","account":"your-saved-account","mode":"search","keywords":["博物馆"],"max_posts":2,"max_comments":3,"max_replies":0,"max_pages":1,"max_seconds":120}
+```
+
+For one known post with root comments:
+
+> Read this Xiaohongshu post with my selected account: [full link]. Save at most20 root comments across at most2 pages; keep any remaining comment coverage explicit.
+
+> 用我选定的账号读取这篇小红书帖子：[完整链接]。最多20条根评论、最多2页，未读部分明确标出。
 
 ```json
 {
@@ -86,17 +100,18 @@ For a source you are authorized to access, use one known note and no comments:
   "account": "your-saved-account",
   "mode": "detail",
   "ids": ["YOUR_AUTHORIZED_NOTE_URL"],
-  "max_items": 1,
-  "max_comments": 0,
-  "max_pages": 1,
-  "max_seconds": 60,
+  "max_posts": 1,
+  "max_comments": 20,
+  "max_replies": 0,
+  "max_pages": 2,
+  "max_seconds": 120,
   "signing_backend": "local"
 }
 ```
 
-Run it with `platform.collect`. Replace both placeholders with your own selected account and source. `signing_backend: "service"` is optional and requires the separately configured local signing component. An existing account, successful signature calculation, or HTTP200 alone does not certify login validity or successful content extraction.
+Run it with `platform.collect` and replace the account and source placeholders. Keep the full post URL, including access parameters. `signing_backend:"service"` selects the separately configured local signing component; the default is local signing. A login challenge pauses access for normal user verification.
 
-使用 `platform.collect` 执行，替换账号与来源占位内容。可选 `service` 签名需先配置本机签名组件。账号存在、签名算出或 HTTP200 本身都不等于登录有效或正文采集成功。
+使用 `platform.collect` 执行，替换账号与来源占位内容，保留完整帖链及访问参数。`service` 选择已配置的本机签名组件，默认直接本地签名；遇登录验证时由本人正常完成。
 
 ## Inspect, resume, export / 查看、恢复与导出
 
@@ -107,4 +122,6 @@ Run it with `platform.collect`. Replace both placeholders with your own selected
 
 认真处理部分完成、需要登录和错误状态，保留已取得记录。恢复可复用兼容的来源版本与已审核回答；提高数量上限不会消除账号或网络条件。导出仅针对所选任务，数据库写入必须选择已配置目标。模型标签、相似度和图片描述是派生分析，应保留原始材料供回查。
 
-No example here establishes full upstream or Pro equivalence, complete platform coverage, or an unrestricted commercial-use license. Review the [README licensing section](../README.md#relationship-to-upstream-and-licensing) and component notices before redistribution.
+See [Capabilities](CAPABILITIES.md) for current platform and media validation, and [License](../LICENSE.md) for component use and redistribution terms.
+
+当前平台与媒体验证范围见[能力矩阵](CAPABILITIES.md)，组件使用和再分发条件见[许可](../LICENSE.md)。

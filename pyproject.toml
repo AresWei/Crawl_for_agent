@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "research-crawler"
+version = "0.1.0.dev0"
+description = "Unified local web and social research with source-level integration"
+requires-python = ">=3.12"
+dependencies = [
+  "httpx[http2]==0.28.1", "aiofiles>=24.1.0", "aiosqlite>=0.21.0",
+  "pydantic>=2.13.4", "fastapi>=0.115", "uvicorn>=0.30", "pillow>=10,<13", "lark>=1.2.2,<2", "cryptography>=46,<48",
+  "playwright>=1.61.0", "lxml>=5.3,<7", "beautifulsoup4>=4.12", "cssselect>=1.2", "psutil>=6.1.1", "chardet==5.2.0", "fake-useragent==2.2.0",
+  "parsel==1.9.1", "xhshow==0.2.0", "socksio>=1.0", "pypdf>=7", "rank-bm25>=0.2.2", "snowballstemmer>=3", "openpyxl>=3.1,<4", "jieba==0.42.1", "wordcloud>=1.9,<2", "jsonschema>=4.23,<5"
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8", "pytest-asyncio>=0.24", "PyYAML>=6"]
+databases = ["sqlalchemy[asyncio]>=2,<3", "asyncmy>=0.2,<1", "asyncpg>=0.29,<1", "motor>=3.6,<4"]
+browser = ["patchright==1.64.4"]
+
+[project.scripts]
+research-crawler = "research_crawler.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.setuptools.package-data]
+research_crawler = ["ui/*.html", "ui/*.css", "ui/*.js"]
+"research_crawler.web" = ["LICENSE.crawl4ai", "NOTICE", "source-manifest.json", "preview-source-manifest.json", "semantic-source-manifest.json", "dispatch-source-manifest.json", "local-content-filter-source-manifest.json", "tls-source-manifest.json", "hooks-source-manifest.json", "schema-inference-source-manifest.json", "local-tables-source-manifest.json", "adaptive-source-manifest.json", "config-inventory.json", "config-source-manifest.json", "crawler-source-manifest.json", "legacy-cache-source-manifest.json", "screenshots-source-manifest.json", "http-encoding-source-manifest.json", "block-detection-source-manifest.json", "user-agents-source-manifest.json", "crawler_assets/*.js", "dom_assets/*.js", "dom_assets/*.json"]
+"research_crawler.web.c4a" = ["LICENSE.crawl4ai", "source-manifest.json"]
+"research_crawler.platforms" = ["session-validation-source-manifest.json", "*.js", "kuaishou_assets/*.graphql", "zhihu/*.js", "tieba/*.js"]
+"research_crawler.analysis" = ["wordcloud-stopwords.txt"]
+"research_crawler.discovery" = ["LICENSE.crawl4ai", "source-manifest.json"]

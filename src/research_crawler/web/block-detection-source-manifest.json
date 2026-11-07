@@ -1,0 +1,22 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/antibot_detector.py",
+  "source_sha256": "c72f772e735a0ea6fea7000cc8e8121afdef4e786efaaadd322ab41abbee62e0",
+  "license": "LICENSE.crawl4ai",
+  "attribution": "NOTICE",
+  "targets": [
+    {
+      "path": "src/research_crawler/web/antibot_detector.py",
+      "sha256": "788f7e1602c771f2d126828e1e420086cefa41cc7e928aadbea5068e52030bbc"
+    },
+    {
+      "path": "src/research_crawler/web/block_detection.py",
+      "sha256": "b6e995ed017c37ff7b690029c7da0d4ee68499ca797316e28b2da1918947e3e0"
+    }
+  ],
+  "changes": [
+    "Original detector algorithm unchanged; attribution comments added",
+    "Independent opt-in receipt wrapper skips raw/local/binary/placeholder inputs",
+    "No paid fallback, proxy/account switching or challenge interaction; positive requires parent source exclusion"
+  ]
+}

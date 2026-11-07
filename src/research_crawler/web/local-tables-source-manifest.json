@@ -1,0 +1,35 @@
+{
+  "source": "upstream\\crawl4ai\\crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586\\crawl4ai\\table_extraction.py",
+  "source_sha256": "ba823c843bfc14bf1965093a3f515ba8898e886c8ae480c0309a6063c1c2b817",
+  "methods": [
+    "_create_chunk_html",
+    "_merge_chunk_results",
+    "_validate_table_structure"
+  ],
+  "target": "src\\research_crawler\\web\\local_table_algorithms.py",
+  "target_sha256": "e6c989b2d78310f155f53a1ada84de79746a5faa0f295993884882cb412288b9",
+  "adaptation": "Original pure chunk wrapper, ordered table merge and shape validation; local model driver adds source-cell evidence, rowspan groups and explicit bounds without silently truncating columns.",
+  "driver": {
+    "path": "src/research_crawler/web/local_tables.py",
+    "sha256": "f7f6749fc62eeaac5eed9161ce31736a88fe0d5e68d2569315279d0a0ad534d6"
+  },
+  "driver_modifications": [
+    "Shared local model budget and GPU client",
+    "Whole-operation deadline",
+    "Unsplit rowspan groups",
+    "Per-coordinate fragment and original-document XPath/value verification",
+    "Source-derived multi-level header_rows/header_paths while flat headers use deepest source leaf",
+    "Direct nested-table links, original parent-cell coordinates and explicit unresolved/partial propagation",
+    "Bounded model feedback; structure is DOM-derived and not a semantic truth claim",
+    "Complex-table DOM source_grid recovery only after strict explicit-header/rectangular/nonoverlapping/span-group checks; rejected model output remains separate",
+    "Rowspan=0 bounded to original row group and materialized before chunking; model acceptance and source fallback both validate geometry"
+  ],
+  "source_prompt_read_ranges": {
+    "TABLE_EXTRACTION_PROMPT": "table_extraction.py:377-735; relevant flat output schema and nested-table instructions inspected",
+    "preserved_methods": [
+      "_create_chunk_html",
+      "_merge_chunk_results",
+      "_validate_table_structure"
+    ]
+  }
+}

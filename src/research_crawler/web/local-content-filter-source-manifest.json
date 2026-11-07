@@ -1,0 +1,42 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "license": "LICENSE.crawl4ai",
+  "attribution": "NOTICE",
+  "sources": [
+    {
+      "path": "content_filter_strategy.py",
+      "sha256": "e31a6ad933bc673dcb18359792098a245a0c6d23e76a27c92b37fa292f2f92ba",
+      "selected_lines": [
+        822,
+        1105
+      ]
+    },
+    {
+      "path": "utils.py",
+      "sha256": "e58e6d47dcde165b926acd7ad72631b3aabb4c6240669bd15b788b2a2b546514",
+      "selected_lines": [
+        170,
+        233
+      ]
+    }
+  ],
+  "target": "local_content_filter.py",
+  "target_sha256": "378fa1e13fee45fb7f8dadd68748a4185fc2cb10c250b972ab1e35639741d567",
+  "reused_local_adaptation": {
+    "path": "local_extraction.py",
+    "sha256": "e76a186464ea28ec642036fced8b544a2c4c285f3ab8ec76c28f0d6edd62d704",
+    "symbols": [
+      "chunk_spans",
+      "extract_local",
+      "_quote_reference"
+    ]
+  },
+  "modifications": [
+    "Adapt LLMContentFilter chunk/order/usage/cache flow through existing source-derived local extraction.",
+    "Replace generated markup with exact source quote validation, range union and escaped source rendering.",
+    "Replace ThreadPoolExecutor/provider fallback with shared asynchronous local client and GPU lease.",
+    "Replace MD5(html+instruction) cache with SHA256(source/config/worker/checkpoint/account partition).",
+    "Never store unvalidated generated markup; partial/truncated/unavailable processing preserves original source.",
+    "Actual worker/checkpoint identity uses worker state hash and model/engine file size/mtime/ctime; not a full weights digest."
+  ]
+}

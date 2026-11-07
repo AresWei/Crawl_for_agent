@@ -1,0 +1,40 @@
+{
+  "upstream": "https://github.com/unclecode/crawl4ai",
+  "commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "license": "Apache-2.0; upstream attribution retained",
+  "sources": [
+    {
+      "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/async_dispatcher.py",
+      "source_sha256": "928abf53ebde72046378997087bb91d5599fe0f798ecb358d3bc2db8aa6345ef",
+      "symbols_reviewed": [
+        "RateLimiter",
+        "BaseDispatcher.select_config",
+        "MemoryAdaptiveDispatcher",
+        "SemaphoreDispatcher"
+      ]
+    },
+    {
+      "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/async_configs.py",
+      "source_sha256": "8d59242f593226071476abcb5deeb9695328f0fb27f9eb19bd688bfac14393a3",
+      "symbols_reviewed": [
+        "CrawlerRunConfig.is_match"
+      ]
+    },
+    {
+      "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/utils.py",
+      "source_sha256": "e58e6d47dcde165b926acd7ad72631b3aabb4c6240669bd15b788b2a2b546514",
+      "symbols_reviewed": [
+        "get_true_memory_usage_percent"
+      ]
+    }
+  ],
+  "target": "dispatch.py",
+  "target_sha256": "11fd2f7b894a6379db08dc2f7617b5d08e277a9733f4ef24f6e79a403e1feca8",
+  "adaptation": "Source-derived rate jitter/backoff/success recovery, memory hysteresis admission, semaphore permits and first-match glob configuration; unified core owns lifecycle and atomic frontier. Added bounded idempotent HTTP retry, Retry-After persistence, validated data-only dispatch overrides and bounded control-aware waits. Original streaming, fairness queue and typed config compatibility are not claimed.",
+  "streaming": {
+    "target": "streaming.py",
+    "sha256": "29f044b9e4b85163a6f4ccc0d970e003f93464261fe64004d101175fba4df9f9",
+    "source_method": "MemoryAdaptiveDispatcher.run_urls_stream",
+    "changes": "Continuous completion publication and capacity refill, same-host exclusion, BFS depth barrier and durable round-robin admission. Caller owns every admitted task and cancellation/commit. Original standalone result-container API remains open."
+  }
+}

@@ -1,0 +1,7 @@
+This product includes software developed by UncleCode (https://x.com/unclecode) as part of the Crawl4AI project (https://github.com/unclecode/crawl4ai).
+
+Migrated from Crawl4AI v0.9.5, commit 838869bdda93f25e6d50b3f50ae9577d9b19a586.
+The complete original license, including its attribution requirement, is retained in LICENSE.crawl4ai.
+Original authorship is retained. source-manifest.json records source and modified file SHA-256 values.
+Source selection, application-local dependency wiring and corrected citation URL joining are local modifications.
+The application browser, HTTP lifecycle, checkpoints and storage integration are independently authored.

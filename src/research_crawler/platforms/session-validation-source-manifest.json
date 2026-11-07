@@ -1,0 +1,62 @@
+{
+  "upstream_commit": "54a3d92412f4b20c06b45f1d542b78dd92049d6d",
+  "license": "NON-COMMERCIAL LEARNING LICENSE 1.1",
+  "source_methods": [
+    "pong",
+    "query_self",
+    "get_current_user_info"
+  ],
+  "sources": [
+    {
+      "path": "upstream/mediacrawler/media_platform/xhs/client.py",
+      "sha256": "82410c281dfcdd9761b22e10af04a0a085bb48f14da668a1d8c6f02eec88d4e6"
+    },
+    {
+      "path": "upstream/mediacrawler/media_platform/douyin/client.py",
+      "sha256": "8dfae776c86c5a283eedc52a8504e74c400026d8b8544f0f1ffacdf81f86ca73"
+    },
+    {
+      "path": "upstream/mediacrawler/media_platform/kuaishou/client.py",
+      "sha256": "8ede9e2c78cd7043850549824eabcee2cd46f9d9c489b2e459a78f9bf62c0e2a"
+    },
+    {
+      "path": "upstream/mediacrawler/media_platform/bilibili/client.py",
+      "sha256": "cc8d614ad1615460025cfb78d33d57deb09320254fbe1dbb0989e0a0e6690ba6"
+    },
+    {
+      "path": "upstream/mediacrawler/media_platform/weibo/client.py",
+      "sha256": "9dc6fa03c7d9a45d4008565c487b09c7976fbca885cbf9a93eb183c29a830de7"
+    },
+    {
+      "path": "upstream/mediacrawler/media_platform/tieba/client.py",
+      "sha256": "5167efcd36115708db0f7ce55365226b2ae78d583f7ad4483eaeca43fcec75c0"
+    },
+    {
+      "path": "upstream/mediacrawler/media_platform/zhihu/client.py",
+      "sha256": "ea2324d1aa0b5247cc26a2ad17a7b319a18d4bb0de21b338ca3e943dad8fc2a1"
+    }
+  ],
+  "target": "src/research_crawler/platforms/session_validation.py",
+  "target_sha256": "488b34285f5a7dcadd55bc1c868a831d4e8cef1dd9fd697b0d7989fb099baec5",
+  "changes": [
+    "Shared scoped HTTP/resources/budgets instead of source-owned clients",
+    "Sanitized state receipt; no returned identity/body/cookie output",
+    "Strong explicit login/current-self indicators only; ambiguous XHS/KS success and DY/Tieba local state remain indeterminate",
+    "Strict bounded response/time; challenge/network errors never assert logout",
+    "Existing local Xhshow/Zhihu signer wiring; minimized Kuaishou result-only query"
+  ],
+  "integration_targets": [
+    {
+      "path": "src/research_crawler/core/accounts.py",
+      "sha256": "c704b214d0a500d3937780f3fedeaf4a9aeb8ab789526c5298e0160cd1ce4a3c"
+    },
+    {
+      "path": "src/research_crawler/adapters/accounts.py",
+      "sha256": "d4dc6606e56291dfd5692dce3c6b02972868abd7e981c312bc5d404f839b3ce3"
+    },
+    {
+      "path": "src/research_crawler/adapters/platforms.py",
+      "sha256": "f026193d88d8a5e935cf83ccc95ef8bede60fb2b79a8fe91081eeb6011192908"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "source": "upstream\\crawl4ai\\crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586\\crawl4ai\\ssl_certificate.py",
+  "source_sha256": "f6a33889f3488d9699bbcc737d94bb2f14226d3f9087f938f4770f57df10e5c3",
+  "target": "src\\research_crawler\\web\\tls.py",
+  "target_sha256": "6f880ea15a1dead73573a2a4a3e2845e2726d4fbd776c175b676b6f9f95bfbd0",
+  "adaptation": "Dict certificate schema/export interface; replace independent socket/OpenSSL with shared HTTPX/CDP and cryptography; correct SHA256 DER fingerprint; bounded browser chain observation, explicit verification limits; export failure preserves source."
+}

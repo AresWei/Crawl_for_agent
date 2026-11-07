@@ -1,0 +1,88 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "sources": [
+    {
+      "source": "crawl4ai/async_url_seeder.py",
+      "source_sha256": "5a5be79cc1bc5ca23a6d8592ab1d5da7b4008ac0ff0855e3036446add58f7402",
+      "symbols": [
+        "_meta_rx",
+        "_charset_rx",
+        "_title_rx",
+        "_link_rx",
+        "_match",
+        "_parse_head",
+        "AsyncUrlSeeder._extract_text_context",
+        "AsyncUrlSeeder._calculate_url_relevance_score",
+        "AsyncUrlSeeder._calculate_bm25_score"
+      ]
+    },
+    {
+      "source": "crawl4ai/domain_mapper.py",
+      "source_sha256": "e9bbfee43026c80eef56d63231033bf87f1215023e99fc5716a11dc47bf8910c",
+      "symbols": [
+        "_NONSENSE_SUFFIXES",
+        "_NONSENSE_CONTAINS",
+        "_ASSET_EXTENSIONS",
+        "Soft404Fingerprint",
+        "DomainMapper._is_soft_404",
+        "DomainMapper._parse_feed_xml",
+        "DomainMapper._is_nonsense"
+      ]
+    }
+  ],
+  "target": "source_algorithms.py",
+  "target_sha256": "dbe078bd79cfe449978a726c00e733e4bee1a87069a8f225dc7d95d752ca0673",
+  "adapted_targets": [
+    {
+      "target": "parsers.py",
+      "target_sha256": "87aa296b4bf2d685269f59fcd5748a47a2671d98702dd4d7f507e7d209a609f0",
+      "derived_from": [
+        "AsyncUrlSeeder._iter_sitemap_content",
+        "DomainMapper._scan_robots_txt",
+        "DomainMapper._fingerprint_soft_404",
+        "DomainMapper._scan_homepage"
+      ]
+    },
+    {
+      "target": "archives.py",
+      "target_sha256": "155074000faf639a941888c75a440171b1c789ce6a90a76eee232f145a3605ac",
+      "derived_from": [
+        "DomainMapper._discover_via_crt",
+        "DomainMapper._discover_via_wayback",
+        "AsyncUrlSeeder._from_cc"
+      ],
+      "changes": "Retain certificate-name and archive-URL selection; public API page-count/resume protocol, exact host scopes, strict response validation and shared transport replace independent clients and silent failures."
+    },
+    {
+      "target": "runtime.py",
+      "target_sha256": "aa8138e8ada0ab0d6340647b31ffd904905757cff13df2fa9cc55aa3fd9c3b4c",
+      "derived_from": [
+        "DomainMapper.scan",
+        "DomainMapper._apply_scoring"
+      ],
+      "changes": "Shared task-owned driver queues each explicit origin; inclusive threshold uses current selected scoring family and finite corpus. Checkpoints and versioned eligibility preserve partial/resume results without separate resource ownership."
+    },
+    {
+      "target": "cache.py",
+      "derived_from": [
+        "AsyncUrlSeeder._cache_get",
+        "AsyncUrlSeeder._cache_set",
+        "AsyncUrlSeeder._from_cc",
+        "AsyncUrlSeeder._from_sitemaps",
+        "AsyncUrlSeeder._validate",
+        "_is_cache_valid",
+        "_parse_sitemap_lastmod"
+      ],
+      "changes": "Active seeder caching adapted to opt-in shared response snapshots, digest-partitioned account/proxy/live-cookie identities, bounded atomic disk writes, source acquisition provenance, XML lastmod validation through the shared HTTP owner; no dormant DomainMapper cache.",
+      "target_sha256": "0c525ee834981fb1dd2d7c02d21f4b9c57c3e292d772ea710d44c117e66dae79"
+    }
+  ],
+  "changes": [
+    "Select pure methods, preserve their bodies and algorithm behavior",
+    "Move selected methods into one SourceAlgorithms class with silent logger",
+    "Harden feed XML parser: no recovery, entities or network",
+    "parsers.py adapts sitemap XPath/normalization and robots directive extraction from these same files",
+    "Shared bounded driver replaces independent HTTP/cache/concurrency and recursive task scheduling",
+    "2026-11-07: homepage preload references preserved; shared discovery driver scans every explicit origin and applies finite score thresholds with versioned resume eligibility."
+  ]
+}

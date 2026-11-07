@@ -1,0 +1,35 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/user_agent_generator.py",
+  "source_sha256": "cd57dce84a0086df20460fe0aea4ef0e24b6f819f8b3a84872c14275a0b91723",
+  "source_classes_ast_preserved": [
+    "UAGen",
+    "UserAgentGenerator"
+  ],
+  "target": "src/research_crawler/web/user_agents.py",
+  "target_sha256": "cfecde49adeb8ada4bf8144a794b37c6a59f7b54cff68177b9fea699eed537a1",
+  "license": "LICENSE.crawl4ai",
+  "attribution": "NOTICE",
+  "changes": [
+    "Pure source classes retained without eager fake_useragent/requests imports",
+    "Once-selected normalized HTTP/browser receipt; closed modes and config/choice hashes for resume",
+    "ValidUA optional lazy installed dataset; original unused pct_threshold explicitly rejected",
+    "Source online selector/filtering with injected shared client, deadline/byte cap and explicit fallback evidence",
+    "Synthetic browser constraint narrowed to matching source stacks; incompatible source options rejected",
+    "Source client hints retained with explicit UAData/fingerprint limitations"
+  ],
+  "integration_targets": [
+    {
+      "path": "src/research_crawler/core/sessions.py",
+      "sha256": "246003c1ef4bf9d39cb4718684d3d613a846f6fe3da015888a8db43640032b0f"
+    },
+    {
+      "path": "src/research_crawler/web/configs.py",
+      "sha256": "3b1c58cd3d104d031d10beced80e958aee939cd5f436f1217cdc80489742ba46"
+    },
+    {
+      "path": "src/research_crawler/web/runtime.py",
+      "sha256": "9d23e3bef2c4797b0714e6dc27fcdbcca56ee88b504435eac74f016e1cec058d"
+    }
+  ]
+}

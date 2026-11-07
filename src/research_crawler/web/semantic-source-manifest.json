@@ -1,0 +1,38 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "license": "LICENSE.crawl4ai",
+  "files": [
+    {
+      "source": "crawl4ai/extraction_strategy.py",
+      "source_sha256": "1321909cdbc139a87718e7969456272b4685d065e25a4e9f6690bd6c8a75d11b",
+      "target": "semantic_processing.py",
+      "target_sha256": "0a3e93a3ef15478747c36945e94d36df1add7c685f6be95022de07233707bc6d",
+      "symbols": "CosineStrategy",
+      "changes": "Preserve semantic filtering, cosine pdist, scipy linkage/fcluster, cluster word counts and source method API; inject bounded local CPU models; add singleton handling and section indices."
+    },
+    {
+      "source": "crawl4ai/model_loader.py",
+      "source_sha256": "814d5bc8c2df6691ee5c4417ffd2602c7774903d7ff200465a4851515864b8b4",
+      "target": "semantic_topics.py",
+      "target_sha256": "0598de0519d0d9f2fe9fd3c136775fe8a555747a894a363296e1aa7bc3411740",
+      "symbols": "load_text_multilabel_classifier",
+      "changes": "Preserve original model, sigmoid >=0.5 and 64-token truncation; explicit CPU, local-only files, weights_only loading, batch4, scores and provenance."
+    },
+    {
+      "source": "crawl4ai/chunking_strategy.py",
+      "source_sha256": "86a9037c1fbbd396751eb13d6aaaab1b0f6d2f83710d821e0f5ca09ac461dda1",
+      "target": "nlp_chunking.py",
+      "target_sha256": "b6545cdd313e659ba11af5b11ff41053d2949999c93a4b5e9e185545a180eda1",
+      "symbols": "NlpSentenceChunking; TopicSegmentationChunking",
+      "changes": "Retain NLTK Punkt/TextTiling/Counter methods; fix nl.toknize typo and lowercase stopwords; local-only data and exact source span adapter."
+    },
+    {
+      "source": "crawl4ai/model_loader.py",
+      "source_sha256": "814d5bc8c2df6691ee5c4417ffd2602c7774903d7ff200465a4851515864b8b4",
+      "target": "semantic_embeddings.py",
+      "target_sha256": "9c0e1427fb36ac5dedcdf6383fb5c2ab10c4d3537202d34e7025d63be3941ee7",
+      "symbols": "load_HF_embedding_model + CosineStrategy.get_embeddings",
+      "changes": "Replace optional Torch sentence embedder with published multilingual ONNX; masked mean pooling/L2 and CPU2 threads; preserve independent semantic meaning, no lexical surrogate."
+    }
+  ]
+}

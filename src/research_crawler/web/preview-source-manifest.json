@@ -1,0 +1,22 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "sources": [
+    {
+      "path": "link_preview.py",
+      "sha256": "7af9a24b661562a8f18aed0b0c035a24fb6071ef939721b494d9e644b96b9167"
+    },
+    {
+      "path": "utils.py",
+      "sha256": "e58e6d47dcde165b926acd7ad72631b3aabb4c6240669bd15b788b2a2b546514"
+    }
+  ],
+  "selected_methods": [
+    "LinkPreview._filter_links",
+    "LinkPreview._merge_head_data",
+    "LinkPreview._log",
+    "calculate_total_score"
+  ],
+  "target": "preview_algorithms.py",
+  "target_sha256": "993c6a2b569786e9b993954264cb086171bddb96e78f17f1b2e30b33c4f6b05f",
+  "modifications": "Only pure methods selected, imports rebound to unified models; browser/http/cache owners excluded."
+}

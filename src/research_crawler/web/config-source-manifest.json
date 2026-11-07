@@ -1,0 +1,37 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/async_configs.py",
+  "source_sha256": "8d59242f593226071476abcb5deeb9695328f0fb27f9eb19bd688bfac14393a3",
+  "license": "LICENSE.crawl4ai",
+  "attribution": "NOTICE",
+  "symbols": [
+    "to_serializable_dict",
+    "_is_typed_shape",
+    "from_serializable_dict",
+    "BrowserConfig.clone/dump/load",
+    "CrawlerRunConfig.is_match/clone/dump/load",
+    "HTTPCrawlerConfig.clone/dump/load"
+  ],
+  "targets": [
+    {
+      "path": "src/research_crawler/web/configs.py",
+      "sha256": "3b1c58cd3d104d031d10beced80e958aee939cd5f436f1217cdc80489742ba46"
+    },
+    {
+      "path": "src/research_crawler/web/config-inventory.json",
+      "sha256": "fe4af227a9155a8cb458ad1b902495de87508e2b3690da3be849129632924f02"
+    }
+  ],
+  "changes": [
+    "Sparse explicit-field overrides preserve unified product defaults; full source field inventory retained",
+    "Closed constructor registry with original dictionary envelopes and data-type distinction",
+    "Unknown and unsupported execution fields raise rather than silently drop",
+    "Native trusted callable matchers remain in Python only; JSON default untrusted",
+    "Milliseconds map explicitly to existing shared runtime units; same core owns resources"
+  ],
+  "per_url": {
+    "path": "url_configs.py",
+    "sha256": "d5aea8f38aae256fbeb9aff0c35f1747df1e43f19573319a0bac69c8be1bbb1d",
+    "integration": "runtime.py first-match shared resource context; core/sessions.py timeout-specific HTTP reuse"
+  }
+}

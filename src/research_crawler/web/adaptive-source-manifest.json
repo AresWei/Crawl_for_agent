@@ -1,0 +1,45 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/adaptive_crawler.py",
+  "source_sha256": "5d725f1a73a3f78634cbe73bc753f75b815e3ef1af313612194fa383a01410de",
+  "symbols": [
+    "CrawlStrategy",
+    "StatisticalStrategy"
+  ],
+  "target": "adaptive_algorithms.py",
+  "target_sha256": "f95b54a877a82a41dce17f6cf1c4a201effc10f32b3cb335dbac91c082611456",
+  "changes": [
+    "Future annotations decouple original model/config dependencies.",
+    "Correct document-frequency membership to compare document id with ids.",
+    "Original network-owning AdaptiveCrawler, JSON file persistence and remote embedding/query providers are not imported.",
+    "EmbeddingStrategy math/shape/ranking/validation/convergence reused with injected local CPU vectors.",
+    "Remote query generation replaced by explicit bounded shared local model generation and deterministic held-out split.",
+    "Original centroid/radius shape and empty boundary sampler retained; no real alpha-shape implementation claimed."
+  ],
+  "driver": {
+    "path": "adaptive.py",
+    "sha256": "fb8411e91fbf05a221876e711ed0e41850344d4de517f17b48a98fbab43b2552"
+  },
+  "embedding_algorithms": {
+    "path": "adaptive_embedding_algorithms.py",
+    "sha256": "e8feab7d2770a9c81116639b1885caf674c9da07e13bb1c3b3d9d6bab01aa1b8",
+    "methods": [
+      "__init__",
+      "_compute_distance_matrix",
+      "_get_cached_distance_matrix",
+      "_sample_boundary_points",
+      "calculate_confidence",
+      "compute_coverage_shape",
+      "find_coverage_gaps",
+      "rank_links",
+      "select_links_for_expansion",
+      "should_stop",
+      "update_state",
+      "validate_coverage"
+    ]
+  },
+  "embedding_driver": {
+    "path": "adaptive_embedding.py",
+    "sha256": "348b61c18435a3abf21ee8dd5cddaf6fed4f8268eb029cbdeaad636b1afc08bb"
+  }
+}

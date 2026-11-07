@@ -1,0 +1,45 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "license": "LICENSE.crawl4ai",
+  "attribution": "NOTICE",
+  "sources": [
+    {
+      "path": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/async_database.py",
+      "sha256": "16264e47eac8404d2eb37e9ad6247ff0b3120609beeea18a73b2097d0c649fe7"
+    },
+    {
+      "path": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/utils.py",
+      "sha256": "e58e6d47dcde165b926acd7ad72631b3aabb4c6240669bd15b788b2a2b546514"
+    },
+    {
+      "path": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/legacy/database.py",
+      "sha256": "5a8d56ba112c77e1ee331705c90f09c0c61315140cb8a9db30581115f4424369"
+    }
+  ],
+  "symbols": [
+    "AsyncDatabaseManager.ainit_db/update_db_schema",
+    "aget_cached_url/acache_url",
+    "_store_content/_load_content",
+    "ensure_content_dirs/generate_content_hash",
+    "legacy.init_db"
+  ],
+  "targets": [
+    {
+      "path": "src/research_crawler/web/legacy_cache.py",
+      "sha256": "988a93a89c967f0ba27180775b80d6f2de5a8a5392a979c6061c63ce57189587"
+    },
+    {
+      "path": "src/research_crawler/adapters/cache_transfer.py",
+      "sha256": "3ccc888e7a05ef39fcc3d2785b6c4bb6288283d3f847f3884cc77dc9728d990b"
+    }
+  ],
+  "changes": [
+    "Shared JobRunner/atomic Store cursor replaces original manager",
+    "Explicit archived identity scope; no PageCache promotion",
+    "Cache-write time distinct from acquisition/publication/import",
+    "Opaque SHA256 export filenames load through original reader; xxh64 not recomputed",
+    "Plain source layout; gzip only explicit bounded extension",
+    "Job-owned settled export with all selected versions in sidecar",
+    "Verified job-owned sibling staging and rollback preserve previous successful export on build/budget failures; cleanup rejects unknown files and escaped links"
+  ]
+}

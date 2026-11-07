@@ -1,0 +1,36 @@
+{
+  "upstream": "https://github.com/unclecode/crawl4ai",
+  "commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "license": "Apache-2.0; upstream attribution retained",
+  "sources": [
+    {
+      "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/async_crawler_strategy.py",
+      "source_sha256": "20e1b1d1303ce948397797c23f7c9e5c8daab399edf759686863c60b9c722e9e",
+      "symbols_reviewed": [
+        "AsyncPlaywrightCrawlerStrategy.__init__",
+        "start",
+        "set_hook",
+        "execute_hook",
+        "update_user_agent",
+        "_crawl_web",
+        "robust_execute_user_script",
+        "execute_user_script"
+      ]
+    },
+    {
+      "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/browser_manager.py",
+      "source_sha256": "62d8af68d8739816baa8ebc09628e15b1297ce1923652d98df0ddeafa867dfc6",
+      "symbols_reviewed": [
+        "BrowserManager.start",
+        "BrowserManager.get_page"
+      ]
+    }
+  ],
+  "target": "hooks.py",
+  "target_sha256": "f61a8db79c4ef1f7d15a61e58071780bcbe694c103e06453a496b11b3beb4b01",
+  "integration_files": [
+    "src/research_crawler/web/runtime.py",
+    "src/research_crawler/core/sessions.py"
+  ],
+  "adaptation": "Source-derived nine-name registry, native call signatures and ignored-return semantics; dormant UA event kept explicit. Shared core owns browser/provider/session lifetimes. Default existing pre-wait behavior preserved with opt-in upstream phase order. Added separate data-only JavaScript configuration, explicit HTML-return transformation, async/body/function/expression variants, main-world provider execution, shared control cancellation, bounded scripts and sanitized failure summaries. No serialized Python evaluation or secret result persistence. Full upstream typed configuration and dormant-event invocation parity not claimed."
+}

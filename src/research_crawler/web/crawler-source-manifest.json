@@ -1,0 +1,41 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "license": "LICENSE.crawl4ai",
+  "attribution": "NOTICE",
+  "sources": [
+    {
+      "path": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/hub.py",
+      "sha256": "0e11ff1f50f40a46aa06ebad235aef8877e18c605981e647cf51fa4e86f216bc"
+    },
+    {
+      "path": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/crawlers/google_search/crawler.py",
+      "sha256": "e120b9ea92dc20129d73d42f656b70987eed454d2e2ab71df24530a191c3a05d"
+    },
+    {
+      "path": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/crawlers/google_search/script.js",
+      "sha256": "98d0cd54cd21d9ac1e592434b301d45c28fa0ac6695de9fe90b66f7bc0fbe1e8"
+    },
+    {
+      "path": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/crawlers/amazon_product/crawler.py",
+      "sha256": "088385260ac4e557ed65576f1a9236bb985d8d45a31407fd92d033b2b8789fd4"
+    }
+  ],
+  "targets": [
+    {
+      "path": "src/research_crawler/web/crawlers.py",
+      "sha256": "92204922670560f0748bc212c0e08c7083aee48d056a075679825a00b8c935bc"
+    },
+    {
+      "path": "src/research_crawler/web/crawler_assets/google_images.js",
+      "sha256": "d637f487723e58424821335b792c043e0f4b66c5796730123e5281b7d598fd96"
+    }
+  ],
+  "adaptations": [
+    "BaseCrawler async interface and get-by-name registry retained with fixed imports instead of arbitrary plugin discovery.",
+    "Google query options, three source schema targets and image field mapping retained; query URL encoding fixed.",
+    "Single parent web.collect owns acquisition, identity cache, cancellation and local model budgets; no nested AsyncWebCrawler or global schema files.",
+    "Google image runtime mapping bounded with explicit derived DOM JSON receipt; no challenge handling.",
+    "Amazon original returns literal fake Test Amazon Product; new DOM and JSON-LD extraction reads actual source and never emits that stub.",
+    "Top Stories inference query preserves the frozen source imageUrl request; required target fields retain the original four-field example."
+  ]
+}

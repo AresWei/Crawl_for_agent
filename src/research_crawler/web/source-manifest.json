@@ -1,0 +1,236 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "files": [
+    {
+      "source": "crawl4ai/html2text/__init__.py",
+      "source_sha256": "90d72a5271143776996d4d72856aaabd74c8892856d8963e8670a9e8ec5a9680",
+      "target": "html2text/__init__.py",
+      "target_sha256": "be356e763679d47410712bcb7a212b34629d66ce7c9afd870185f30af73a719a",
+      "changes": "Verbatim source with attribution header"
+    },
+    {
+      "source": "crawl4ai/html2text/__main__.py",
+      "source_sha256": "6d8b7d7846a845059d7a3107143f11131f63c5511d669b44085b15ec5e3d2279",
+      "target": "html2text/__main__.py",
+      "target_sha256": "45deed4fc83a39548bc93cff0a12af15af1bd3bb6af74de401ddd7ca9d7b5d76",
+      "changes": "Verbatim source with attribution header"
+    },
+    {
+      "source": "crawl4ai/html2text/_typing.py",
+      "source_sha256": "2df3f2fb13ea0ebf47ad3d67de4f58f22e6ef06afde025e8deff3ecbdfa30ded",
+      "target": "html2text/_typing.py",
+      "target_sha256": "303c14031abe9486fb70a6f2213c212bd52d1f7642829e9ec469b2649944cf2c",
+      "changes": "Verbatim source with attribution header"
+    },
+    {
+      "source": "crawl4ai/html2text/cli.py",
+      "source_sha256": "657f2a3173f64f073c8333f6c5b27f585992ba4e2c2f0285b0511a897d131490",
+      "target": "html2text/cli.py",
+      "target_sha256": "31176cc8f510492f51e7e5fce70a7c0c5800e6a06d1f6531b1fe8edde3fd8658",
+      "changes": "Verbatim source with attribution header"
+    },
+    {
+      "source": "crawl4ai/html2text/config.py",
+      "source_sha256": "9b2895fd6df78d7d226c06c0e1f6ab27dcab6561aac02ef56d83a5f04dd0d33b",
+      "target": "html2text/config.py",
+      "target_sha256": "136c4770089aebbfc5cb45d21333a5a8a583137f94f65836cf518ead8dc2175b",
+      "changes": "Verbatim source with attribution header"
+    },
+    {
+      "source": "crawl4ai/html2text/elements.py",
+      "source_sha256": "a77a27310fb881c008f14dfa1c01f9bef5fef6ce90310023ad5dae5eb8e3cdd8",
+      "target": "html2text/elements.py",
+      "target_sha256": "d948811f1ff124bbbe9ddb8e01f9d179818bef5afa2cad721e0f1e60b1fa17bc",
+      "changes": "Verbatim source with attribution header"
+    },
+    {
+      "source": "crawl4ai/html2text/utils.py",
+      "source_sha256": "5e973ca8de27b22fab430be245ed0bc7c5220afd48c33dea3473df22a928b817",
+      "target": "html2text/utils.py",
+      "target_sha256": "96cafa5234764e551a04e626c9ca747f02ef731b7722908ca67f58c38a027a76",
+      "changes": "Verbatim source with attribution header"
+    },
+    {
+      "source": "crawl4ai/markdown_generation_strategy.py",
+      "source_sha256": "f6ea10df7b96f2876c8769afc7638a83884315c87abf41036f8710420669fa00",
+      "target": "markdown_generation_strategy.py",
+      "target_sha256": "d98f87fa73e035b72d9e6c57704af4f490320e6b97482dcc38cd5e649e867ed1",
+      "changes": "Application-local result dataclass/filter imports; fix root-relative citation URL joining"
+    },
+    {
+      "source": "crawl4ai/content_filter_strategy.py",
+      "source_sha256": "e31a6ad933bc673dcb18359792098a245a0c6d23e76a27c92b37fa292f2f92ba",
+      "target": "content_filter_strategy.py",
+      "target_sha256": "205f5dd4901c097f0cfa0e366d59e7e398a8b6dc4d017f736bfd3b8a8432b6ed",
+      "changes": "Retain deterministic base and pruning filter; exclude BM25 and paid/LLM filter dependencies; postponed logger annotations"
+    },
+    {
+      "source": "crawl4ai/content_filter_strategy_lxml.py",
+      "source_sha256": "6308c52e8b3f419ccb2406373ce2e90af73e16be761d17274f48eab00e18d634",
+      "target": "content_filter_strategy_lxml.py",
+      "target_sha256": "54bd6dd429e431563c319431e91ee712f305004e8b3a06437c22e79b20de66b1",
+      "changes": "Verbatim source with attribution header"
+    },
+    {
+      "source": "crawl4ai/extraction_strategy.py",
+      "source_sha256": "1321909cdbc139a87718e7969456272b4685d065e25a4e9f6690bd6c8a75d11b",
+      "target": "extraction_strategy.py",
+      "target_sha256": "d2321e5d23fd74641027426a7ddbad0d7f3b7eb50c4990d2c3d83b9ddc9d8179",
+      "changes": "Retain CSS/XPath hierarchical schema, no-op and regex extraction; exclude schema/pattern generation, LLM and embedding strategies"
+    },
+    {
+      "source": "crawl4ai/chunking_strategy.py",
+      "source_sha256": "86a9037c1fbbd396751eb13d6aaaab1b0f6d2f83710d821e0f5ca09ac461dda1",
+      "target": "chunking_strategy.py",
+      "target_sha256": "c9e409e0506af52aae543dec276c9dab45ec377b102d7669af003eb3b110951e",
+      "changes": "Retain deterministic chunkers; exclude NLTK/model-loading chunkers"
+    },
+    {
+      "source": "crawl4ai/utils.py",
+      "source_sha256": "e58e6d47dcde165b926acd7ad72631b3aabb4c6240669bd15b788b2a2b546514",
+      "target": "filter_utils.py",
+      "target_sha256": "b9fdf21190742374eebf4af7b65529e95fb0b0d33d944cee8afec0581befad07",
+      "changes": "Select deterministic upstream stop-word and noise filtering"
+    },
+    {
+      "source": "crawl4ai/content_filter_strategy.py",
+      "source_sha256": "e31a6ad933bc673dcb18359792098a245a0c6d23e76a27c92b37fa292f2f92ba",
+      "target": "bm25_filter.py",
+      "target_sha256": "0746e1b5f97bd37058163e0615d36bfed4168e8c175f299512cb59b76b6e9fd3",
+      "changes": "Preserve BM25 implementation in a lazily imported module"
+    },
+    {
+      "source": "crawl4ai/table_extraction.py",
+      "source_sha256": "ba823c843bfc14bf1965093a3f515ba8898e886c8ae480c0309a6063c1c2b817",
+      "target": "table_extraction.py",
+      "target_sha256": "65c125246fb982ebb8fc40ce7912dc5b333e55949f2f852f32fd6d1b2ba0df7c",
+      "changes": "Preserve deterministic table scoring, rowspan and colspan extraction without eager LLM dependencies"
+    },
+    {
+      "source": "crawl4ai/utils.py",
+      "source_sha256": "e58e6d47dcde165b926acd7ad72631b3aabb4c6240669bd15b788b2a2b546514",
+      "target": "scraping_utils.py",
+      "target_sha256": "fc07aa7f07081bb1c02c75dd0200c4d392a85517da045854172c729c0cd5113c",
+      "changes": "Select metadata, URL and link scoring algorithms without network/model dependencies"
+    },
+    {
+      "source": "crawl4ai/config.py",
+      "source_sha256": "bebe789527a3cb37fbd08ab980f7f4092e2ead78a1221ab26d73fc32304a17f5",
+      "target": "scraping_config.py",
+      "target_sha256": "24fe214391a3d2aee2bea1d8c915dfcf375add376caeaa96e4f4fe4f1ed81ea8",
+      "changes": "Select only deterministic scraper defaults; omit remote-provider/process defaults"
+    },
+    {
+      "source": "crawl4ai/models.py",
+      "source_sha256": "9bad0ff4322e9b91d884b04f93a5bc51a48598a8dacd75d527a621ec227ee6a1",
+      "target": "scraping_models.py",
+      "target_sha256": "9d37072174c29814cdb2d89d6ce4888289e7c1309df2cb8efe1bcbc03254aad5",
+      "changes": "Select original scraper result models"
+    },
+    {
+      "source": "crawl4ai/content_scraping_strategy.py",
+      "source_sha256": "07abc8b5add38a370d19e09ae9a76e01169987290193a4598a844c758e76bf48",
+      "target": "content_scraping_strategy.py",
+      "target_sha256": "840f4db1b11d38a3f67246280e7edf22de7a9f4b99be213c6e2dc36a0ee1ad9a",
+      "changes": "Preserve LXML scraper; inject local model/config/utils modules; disable unused requests-owned image helper and independent link-preview transport"
+    },
+    {
+      "source": "crawl4ai/utils.py",
+      "source_sha256": "e58e6d47dcde165b926acd7ad72631b3aabb4c6240669bd15b788b2a2b546514",
+      "target": "cache_fingerprint.py",
+      "target_sha256": "aaefccf89e1b5b495113d8abd262e14e504be87fbf1d9897e16392a86f5ddb61",
+      "changes": "Preserve fingerprint signals; use standard-library SHA256 instead of xxhash, so fingerprints are product-local"
+    },
+    {
+      "source": "crawl4ai/cache_validator.py",
+      "source_sha256": "2c0245a9f17a9fc33f84c3d884409053a00035f3a656ee06acee77988c4deee7",
+      "target": "cache_validator.py",
+      "target_sha256": "57065683d609e67583bcd3494ae0744dc1ca4421b70e781a8bc978c6b17e12b0",
+      "changes": "Inject shared HTTP client, no independent lifecycle; propagate core cancellation/budgets; preserve fresh/stale/unknown/error semantics; treat empty validation bodies as unavailable evidence"
+    },
+    {
+      "source": "crawl4ai/cache_context.py",
+      "source_sha256": "ae67890490981600f27f4ac3fced1f4da65a9948b4d969dd1049ad44b14e9af8",
+      "target": "cache_context.py",
+      "target_sha256": "b7d7fdbe8ae5f7223a6bb29276bfa84d479df28a742635e8a20805e9c3622bc9",
+      "changes": "Verbatim source with attribution header"
+    },
+    {
+      "source": "crawl4ai/deep_crawling/scorers.py",
+      "source_sha256": "549ddd640613b3795dc0bca8a5ce72bb3ff27f8633810781d571192030c776d8",
+      "target": "deep_crawling/scorers.py",
+      "target_sha256": "1f034e8a4a17e6bc593a724915c353fc6689dbbdc58fb574158b1fb14c04353b",
+      "changes": "Verbatim source with attribution header"
+    },
+    {
+      "source": "crawl4ai/processors/pdf/processor.py",
+      "source_sha256": "f50e0a3d3537b04cf8eb82dddf67f2629f046e74c1841118bfa8fb358a36be08",
+      "target": "processors/pdf/processor.py",
+      "target_sha256": "eed5aac371d84c8ec64564dc40c193578ba9ed1a561cb59fce7ae14840fd0f42",
+      "changes": "Verbatim source with attribution header"
+    },
+    {
+      "source": "crawl4ai/processors/pdf/utils.py",
+      "source_sha256": "da4c73301a8d0d577026081d8cc7a6dd2b8be116b32de0635195526c040a686f",
+      "target": "processors/pdf/utils.py",
+      "target_sha256": "c46f28ab465d46f0d538ea0b23bcf8fe77fba98f023fbbbf844bf04b891cdc24",
+      "changes": "Verbatim source with attribution header"
+    },
+    {
+      "source": "crawl4ai/deep_crawling/base_strategy.py",
+      "source_sha256": "a5b858855b1bf0a23ac8abe2eca102b3b6ff35f0d6ced7b9a6911e2b15e90fd7",
+      "target": "deep_crawling/base_strategy.py",
+      "target_sha256": "96b1239349bbb1b17955d22a189f1d7db4273949e04578288500151c472a3ce4",
+      "changes": "Preserve upstream traversal and discovery algorithms; postpone annotations and use local source models/utilities. Product execution uses durable core frontier, not upstream callbacks as persistence."
+    },
+    {
+      "source": "crawl4ai/deep_crawling/bfs_strategy.py",
+      "source_sha256": "3c2b64cde51213302541eba34a08892a92e7072fff1973e8ca075c9350af2df9",
+      "target": "deep_crawling/bfs_strategy.py",
+      "target_sha256": "11e1dea5c4a66f0435feeffd425d8ebb83da5fbbcadbb9a860773f7d631069da",
+      "changes": "Preserve upstream traversal and discovery algorithms; postpone annotations and use local source models/utilities. Product execution uses durable core frontier, not upstream callbacks as persistence."
+    },
+    {
+      "source": "crawl4ai/deep_crawling/dfs_strategy.py",
+      "source_sha256": "4d91e0119d3501bf0373cbc38a4b7715b1d1e3624a214b55296be0e8bf4026ef",
+      "target": "deep_crawling/dfs_strategy.py",
+      "target_sha256": "a14e94351702ca234e30b6a482b1d3ecef791acd5ab047bd477b2910889b4ae7",
+      "changes": "Preserve upstream traversal and discovery algorithms; postpone annotations and use local source models/utilities. Product execution uses durable core frontier, not upstream callbacks as persistence."
+    },
+    {
+      "source": "crawl4ai/deep_crawling/bff_strategy.py",
+      "source_sha256": "7b3f0a5508234331222e6f40e59ece3f98bf22d717a218a16aa14e9a42996fa1",
+      "target": "deep_crawling/bff_strategy.py",
+      "target_sha256": "2e93cbd042061670c507fe6cc146aba9edb9c10aab9ee25152de89f174dfcab5",
+      "changes": "Preserve upstream traversal and discovery algorithms; postpone annotations and use local source models/utilities. Product execution uses durable core frontier, not upstream callbacks as persistence."
+    },
+    {
+      "source": "crawl4ai/deep_crawling/filters.py",
+      "source_sha256": "55858c24196e99536e3ed15c13dcbe40f0ab2eb10c65dd1a23af4f553dd08ef6",
+      "target": "deep_crawling/filters.py",
+      "target_sha256": "dba02db09b3fb4b43345f0404f5f5a35ebd11dd7ae519de566f45b40c90b4c1b",
+      "changes": "Inject job-scoped HeadPeekr transport; close unstarted async filter coroutines on synchronous rejection"
+    },
+    {
+      "source": "crawl4ai/models.py",
+      "source_sha256": "9bad0ff4322e9b91d884b04f93a5bc51a48598a8dacd75d527a621ec227ee6a1",
+      "target": "deep_crawling/source_models.py",
+      "target_sha256": "83af91f437f90b80d8cecee5321a6519653f7a115b9299b77b4d749297d505f7",
+      "changes": "Select upstream traversal statistics dataclass"
+    },
+    {
+      "source": "crawl4ai/utils.py",
+      "source_sha256": "e58e6d47dcde165b926acd7ad72631b3aabb4c6240669bd15b788b2a2b546514",
+      "target": "deep_crawling/source_utils.py",
+      "target_sha256": "b1fb5f1a8c2dd9937adf0b5659c8ce62a8bfd933c63a108be4d21bca9e004d03",
+      "changes": "Select upstream deep-crawl URL normalization"
+    },
+    {
+      "source": "LICENSE",
+      "source_sha256": "193fe32704bee15cd74f5153e569cdf830e26445e19798a55daee32da40758aa",
+      "target": "LICENSE.crawl4ai",
+      "target_sha256": "193fe32704bee15cd74f5153e569cdf830e26445e19798a55daee32da40758aa",
+      "changes": "Verbatim upstream license"
+    }
+  ]
+}

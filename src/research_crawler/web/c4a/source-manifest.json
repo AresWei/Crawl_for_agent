@@ -1,0 +1,50 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "files": [
+    {
+      "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/script/__init__.py",
+      "destination": "src/research_crawler/web/c4a/__init__.py",
+      "source_sha256": "51516fe491a7e543d4c0adb0ac306e24c5b9d72fcf65d94649e265f155901c27",
+      "destination_sha256": "40688e1fd8d874573850043a8abec23b850650efae4d6dc7b71b682f7ad57bf6",
+      "changes": [
+        "Attribution header; normalized UTF-8 LF encoding"
+      ]
+    },
+    {
+      "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/script/c4ai_script.py",
+      "destination": "src/research_crawler/web/c4a/c4ai_script.py",
+      "source_sha256": "e87ef7fba82b59e3cbed0736f81ef336196db2cdf593346d2b1668865ebb0ec4",
+      "destination_sha256": "8189d5695cc2ef525c951ba56aa8963f3e97be4d32e3c2b2e2568421d5ca2c7f",
+      "changes": [
+        "Attribution header; normalized UTF-8 LF encoding"
+      ]
+    },
+    {
+      "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/script/c4a_result.py",
+      "destination": "src/research_crawler/web/c4a/c4a_result.py",
+      "source_sha256": "8585acc91517be2d39ddfe94fcf4fce1f8a336f94a68005469f1f638edb36636",
+      "destination_sha256": "9568629be9941a59ba28c4171c54be669f5aef897e86bdde4a1c244bbc593bc8",
+      "changes": [
+        "Attribution header; normalized UTF-8 LF encoding"
+      ]
+    },
+    {
+      "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/script/c4a_compile.py",
+      "destination": "src/research_crawler/web/c4a/c4a_compile.py",
+      "source_sha256": "7a8cc94825e85fcb5a4d1d951eae7acb70f4fd38dc78fd45df63a92b03ea4265",
+      "destination_sha256": "469869d610da27ded533ec7e99c50befb8b160ec1d5f38b54ec1f18e9c64362d",
+      "changes": [
+        "Attribution header; normalized UTF-8 LF encoding",
+        "Use bounded subclass of source compiler",
+        "Replace cloud completion helper with explicit async shared local-model draft generation"
+      ]
+    },
+    {
+      "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/LICENSE",
+      "destination": "src/research_crawler/web/c4a/LICENSE.crawl4ai",
+      "source_sha256": "193fe32704bee15cd74f5153e569cdf830e26445e19798a55daee32da40758aa",
+      "destination_sha256": "193fe32704bee15cd74f5153e569cdf830e26445e19798a55daee32da40758aa",
+      "changes": []
+    }
+  ]
+}

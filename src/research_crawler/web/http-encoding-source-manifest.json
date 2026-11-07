@@ -1,0 +1,47 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/async_crawler_strategy.py",
+  "source_sha256": "20e1b1d1303ce948397797c23f7c9e5c8daab399edf759686863c60b9c722e9e",
+  "source_lines": [
+    2696,
+    2840
+  ],
+  "methods_reviewed": [
+    "_TEXT_CONTENT_TYPES",
+    "_is_text_content",
+    "_handle_http"
+  ],
+  "target": "src/research_crawler/web/http_encoding.py",
+  "target_sha256": "22483c26dea03387ccc7d2303880a5b922b8cb3b027a64be1c5ecac35b599452",
+  "license": "LICENSE.crawl4ai",
+  "attribution": "NOTICE",
+  "changes": [
+    "Shared byte-to-text boundary preserves declared charset then lazy statistical detection concept; no new HTTP lifecycle",
+    "Explicit override, BOM and bounded HTML/XML declarations precede detector; strict UTF-8 avoids unnecessary detection",
+    "Binary MIME/signatures/undeclared NUL-bearing payloads reject to document/media path",
+    "Actual detector version/confidence/sample size and lossy decoding warnings retained; confidence is heuristic",
+    "Input limits remain owned by caller; declaration scan 8192 bytes and detector sample 65536 bytes"
+  ],
+  "integration_targets": [
+    {
+      "path": "src/research_crawler/web/runtime.py",
+      "sha256": "9d23e3bef2c4797b0714e6dc27fcdbcca56ee88b504435eac74f016e1cec058d"
+    },
+    {
+      "path": "src/research_crawler/core/sessions.py",
+      "sha256": "246003c1ef4bf9d39cb4718684d3d613a846f6fe3da015888a8db43640032b0f"
+    },
+    {
+      "path": "src/research_crawler/web/configs.py",
+      "sha256": "3b1c58cd3d104d031d10beced80e958aee939cd5f436f1217cdc80489742ba46"
+    },
+    {
+      "path": "src/research_crawler/search/local.py",
+      "sha256": "3dc4be8ad5b248624490b9ab4bbb79df6a081468d7491b59810efc909527cb9d"
+    },
+    {
+      "path": "src/research_crawler/search/semantic.py",
+      "sha256": "8405dfa1f75e9a95fa26770ae15140b3aff42cdbb83128a67f2c4ad5f9db5350"
+    }
+  ]
+}

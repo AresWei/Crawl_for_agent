@@ -1,0 +1,47 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "license": "LICENSE.crawl4ai",
+  "attribution": "NOTICE",
+  "sources": [
+    {
+      "path": "extraction_strategy.py",
+      "sha256": "1321909cdbc139a87718e7969456272b4685d065e25a4e9f6690bd6c8a75d11b",
+      "selected_lines": [
+        1366,
+        1987
+      ]
+    },
+    {
+      "path": "crawlers/google_search/crawler.py",
+      "sha256": "e120b9ea92dc20129d73d42f656b70987eed454d2e2ab71df24530a191c3a05d",
+      "selected_lines": [
+        66,
+        131
+      ]
+    }
+  ],
+  "target": "schema_inference.py",
+  "target_sha256": "e3db2d8b318a0ac970babcf74a50653ad43c5418ee7d90ca0b07e5e52e6de6b0",
+  "reused_local_adaptations": [
+    {
+      "path": "extraction_strategy.py",
+      "sha256": "d2321e5d23fd74641027426a7ddbad0d7f3b7eb50c4990d2c3d83b9ddc9d8179"
+    },
+    {
+      "path": "local_extraction.py",
+      "sha256": "e76a186464ea28ec642036fced8b544a2c4c285f3ab8ec76c28f0d6edd62d704"
+    },
+    {
+      "path": "local_content_filter.py",
+      "sha256": "378fa1e13fee45fb7f8dadd68748a4185fc2cb10c250b972ab1e35639741d567"
+    }
+  ],
+  "modifications": [
+    "Async unified LocalModelClient and existing shared job GPU lock/budget; no remote-provider fallback.",
+    "Target JSON field paths, bounded versioned feedback, actual original-HTML selector extraction.",
+    "Reject unvalidated best-effort schemas, defaults, computed values and generated transformations.",
+    "SHA256 cache binds source URL/content, config, PageCache identity partition and actual worker/checkpoint metadata; revalidate hits.",
+    "Hard source/prompt/records/output/node budgets; no hidden new crawler or schema-generation process.",
+    "Target structure can be inferred directly from query in the schema-generation call; no extra generated example-value inference call."
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "files": [
+    {
+      "source": "crawl4ai/js_snippet/flatten_shadow_dom.js",
+      "source_sha256": "49f54de2de737acd2878d2e24acda270976802e1eb164397fd62080c9fde3030",
+      "target": "flatten_shadow_dom.js",
+      "target_sha256": "74715f9b38b68409dec91b1fa4ffdbb82e44516f4d74b852c159454734e46e74",
+      "changes": "Retain recursive open-shadow and slot serialization; escape ordinary text correctly; accept max_nodes; do not force-open closed roots."
+    },
+    {
+      "source": "crawl4ai/js_snippet/remove_overlay_elements.js",
+      "source_sha256": "a19075e8500399d4d5423e0f0dc15dae0d662f0ee190aebe9dcf73d6cd8c462d",
+      "target": "remove_overlay_elements.js",
+      "target_sha256": "fa7703657cdb52edc7e42737271f7aa5b7bb0b0a99dd19f22ab9acd347f05288",
+      "changes": "Preserve source overlay removal heuristics; close-button clicking is explicit opt-in; return transformation counts. No consent-accept script is invoked."
+    },
+    {
+      "source": "crawl4ai/async_crawler_strategy.py",
+      "source_sha256": "20e1b1d1303ce948397797c23f7c9e5c8daab399edf759686863c60b9c722e9e",
+      "source_lines": [
+        1355,
+        1464
+      ],
+      "target": "virtual_scroll_original.js",
+      "target_sha256": "6d7bb3edecb68aed5d1a7a2ddb1b32767763a58824ad0ed9a14a5febfa9cc23b",
+      "changes": "Exact selected original virtual-scroll JS retained as reference. Runtime steps split this algorithm for cancellation, limits and Unicode-safe deduplication."
+    },
+    {
+      "source": "crawl4ai/async_crawler_strategy.py",
+      "source_sha256": "20e1b1d1303ce948397797c23f7c9e5c8daab399edf759686863c60b9c722e9e",
+      "source_lines": [
+        1321,
+        1489
+      ],
+      "target": "../dom_processing.py",
+      "target_sha256": "fac0e8fcfcd0e55888bd2d65547c07f6911c88234aef583b30354e0dcba7f53d",
+      "changes": "Adapt source virtual-scroll and process_iframes orchestration to an existing shared page; host-driven cancellation/time/byte/node/frame limits; return raw/derived evidence and explicit missing coverage."
+    },
+    {
+      "source": "crawl4ai/async_crawler_strategy.py",
+      "source_sha256": "20e1b1d1303ce948397797c23f7c9e5c8daab399edf759686863c60b9c722e9e",
+      "source_lines": [
+        1321,
+        1489
+      ],
+      "target": "virtual_scroll_steps.js",
+      "target_sha256": "24cff60de2543080379f091d0d2874ddf08bc5d1d6ac8d2e96f3d7327fb1e888",
+      "changes": "Adapt original snapshot/append/replacement/chunk merge algorithm into finite host-driven operations; preserve Unicode and stable IDs; retain final snapshot; enforce byte/item limits; clone the merged container to prevent live virtualizer listeners discarding the derived aggregate."
+    },
+    {
+      "source": "crawl4ai/async_crawler_strategy.py",
+      "source_sha256": "20e1b1d1303ce948397797c23f7c9e5c8daab399edf759686863c60b9c722e9e",
+      "source_lines": [
+        345,
+        411
+      ],
+      "target": "iframe_replace.js",
+      "target_sha256": "882e116dbe91722e67f640cbf9b352475af3ad98e1428ee7921f5b0b63d98922",
+      "changes": "Adapt original DOMParser and iframe-to-div replacement using a function argument and existing handle; preserve original ID/source and resolve relative URLs without interpolated JavaScript."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>选定站点桥接</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+<main>
+  <header><span class="mark">RC</span><h1>选定站点桥接</h1></header>
+  <p id="current">正在确认当前标签页…</p>
+  <section id="pair-panel">
+    <label for="code">工作台中的一次性配对码</label>
+    <input id="code" type="text" maxlength="20" autocomplete="off" spellcheck="false" placeholder="20 位配对码">
+    <button id="pair" type="button">连接本机工作台</button>
+  </section>
+  <section id="import-panel" hidden>
+    <dl><dt>站点</dt><dd id="site"></dd><dt>保存到账号</dt><dd id="account"></dd></dl>
+    <label class="check"><input id="confirm" type="checkbox">确认当前登录身份对应此账号</label>
+    <button id="import" type="button" disabled>授权此站点并导入一次</button>
+    <button id="revoke" class="secondary" type="button">撤销配对</button>
+  </section>
+  <p id="message" role="status" aria-live="polite"></p>
+  <footer>仅原来选定的主站标签页及其 Cookie 容器。请保留此页直到导入结束。保存不代表平台已验证登录。</footer>
+</main><script src="popup.js"></script>
+</body></html>

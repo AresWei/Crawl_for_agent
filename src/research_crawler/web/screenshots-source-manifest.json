@@ -1,0 +1,24 @@
+{
+  "upstream_commit": "838869bdda93f25e6d50b3f50ae9577d9b19a586",
+  "source": "upstream/crawl4ai/crawl4ai-838869bdda93f25e6d50b3f50ae9577d9b19a586/crawl4ai/async_crawler_strategy.py",
+  "source_sha256": "20e1b1d1303ce948397797c23f7c9e5c8daab399edf759686863c60b9c722e9e",
+  "methods_reviewed": [
+    "take_screenshot",
+    "take_screenshot_scroller"
+  ],
+  "source_lines": [
+    1812,
+    1993
+  ],
+  "target": "src/research_crawler/web/screenshots.py",
+  "target_sha256": "2587e0b954c420bc2b4c05aecc5e9bd22dc8e89533fc2756c92feca7ebd30888",
+  "license": "LICENSE.crawl4ai",
+  "attribution": "NOTICE",
+  "changes": [
+    "Viewport segmentation and ordered image composition adapted into shared page/job lifetime",
+    "Stable viewport avoids upstream resize/media-inline mutation; actual scroll overlap cropped in device pixels",
+    "Explicit pixel/segment/time caps, fixed-sticky policy, original scroll/style restoration",
+    "Partial real-image receipts instead of generated error images; cancellation settles cleanup and persistence before propagating",
+    "on_receipt callback delivers partial artifact ownership before cancellation propagation"
+  ]
+}
